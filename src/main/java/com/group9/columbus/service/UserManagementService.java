@@ -6,8 +6,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.group9.columbus.dto.UserDto;
 import com.group9.columbus.entity.User;
 import com.group9.columbus.entity.UserPrincipal;
+import com.group9.columbus.exception.UserExistsException;
 import com.group9.columbus.repository.UserRepository;
 
 /**
@@ -30,8 +32,18 @@ public class UserManagementService implements UserDetailsService {
         return new UserPrincipal(user);
 	}
 	
-	public void saveNewUser(User user) {
+	public UserDto saveNewUser(User user) throws UserExistsException {
 		// Check if user already present
-		userRepository.save(user);
+		if(userRepository.findByLoginId(user.getLoginId()) == null ) {
+			
+			// activating the user
+			user.setActive(true);
+			
+			UserDto userDto = new UserDto(userRepository.save(user));
+			return userDto;
+		} else {
+			throw new UserExistsException("User with loginId: "+user.getLoginId()+" already present!");
+		}
+		
 	}
 }

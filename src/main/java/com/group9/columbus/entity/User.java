@@ -17,19 +17,21 @@ public class User {
 	@NotNull(message="Password cannot be left null.")
 	private String password;
 	
-	//@NotNull(message="First Name cannot be left null.")
+	@NotNull(message="First Name cannot be left null.")
 	private String firstName;
 	
 	private String lastName;
 	
-	//@NotNull(message="Age cannot be left null.")
+	@NotNull(message="Age cannot be left null.")
 	private Integer age;
 	
-	//@NotNull(message="Email Id cannot be left null.")
+	@NotNull(message="Email Id cannot be left null.")
 	private String emailId;
 	
-	//@NotNull(message="Contact number cannot be left null.")
+	@NotNull(message="Contact number cannot be left null.")
 	private String contactNumber;
+	
+	private boolean isActive;
 	
 	public String getId() {
 		return id;
@@ -95,10 +97,19 @@ public class User {
 		this.contactNumber = contactNumber;
 	}
 
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
 	@Override
 	public String toString() {
-		return String.format("User[id=%s, loginId= '%s'firstName='%s', lastName='%s', "
-				+ "emailid='%s']", id, loginId, firstName, lastName, emailId);
+		return String.format("User[id=%s, loginId= '%s', isActive='%s',"
+				+ " firstName='%s', lastName='%s', "
+				+ "emailid='%s']", id, loginId, isActive, firstName, lastName, emailId);
 		
 	}
 }
