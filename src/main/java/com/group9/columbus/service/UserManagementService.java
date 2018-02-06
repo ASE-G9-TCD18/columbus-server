@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.group9.columbus.dto.UserDto;
@@ -22,7 +23,13 @@ public class UserManagementService implements UserDetailsService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	PasswordEncoder encoder;
 
+	/* (non-Javadoc)
+	 * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
 		User user = userRepository.findByLoginId(loginId);
@@ -38,6 +45,7 @@ public class UserManagementService implements UserDetailsService {
 			
 			// activating the user
 			user.setActive(true);
+			user.setPassword(encoder.encode(user.getPassword()));
 			
 			UserDto userDto = new UserDto(userRepository.save(user));
 			return userDto;

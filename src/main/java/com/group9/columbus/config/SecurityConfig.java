@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	        	.antMatchers(FORM_BASED_LOGIN_ENTRY_POINT).permitAll()
 	        	.antMatchers(FORM_BASED_USER_SIGN_UP).permitAll()
 	        	.antMatchers("/*").authenticated()
+	        
 	        	.and().httpBasic();
 		 
 		 
@@ -68,6 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 	    authProvider.setUserDetailsService(userDetailsService);
 	    authProvider.setPasswordEncoder(encoder());
+	    authProvider.setHideUserNotFoundExceptions(false);
 	    return authProvider;
 	}
 	 
