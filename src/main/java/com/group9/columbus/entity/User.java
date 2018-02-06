@@ -1,25 +1,34 @@
 package com.group9.columbus.entity;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class User {
+	
 	@Id
 	private String id;
 
+	@NotNull(message="Login Id cannot be left null.")
 	private String loginId;
 	
+	@NotNull(message="Password cannot be left null.")
 	private String password;
 	
+	//@NotNull(message="First Name cannot be left null.")
 	private String firstName;
 	
 	private String lastName;
 	
+	//@NotNull(message="Age cannot be left null.")
 	private Integer age;
 	
+	//@NotNull(message="Email Id cannot be left null.")
 	private String emailId;
 	
+	//@NotNull(message="Contact number cannot be left null.")
 	private String contactNumber;
 	
 	public String getId() {
