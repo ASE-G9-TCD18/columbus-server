@@ -24,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	public static final String FORM_BASED_LOGIN_ENTRY_POINT = "/login";
 	public static final String FORM_BASED_USER_SIGN_UP = "/signup";
+	public static final String SWAGGER_UI = "/swagger-ui.";
 	
 	@Autowired
 	private RestAuthenticationEntryPoint authenticationEntryPoint;
@@ -47,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	        	.authorizeRequests()
 	        	.antMatchers(FORM_BASED_LOGIN_ENTRY_POINT).permitAll()
 	        	.antMatchers(FORM_BASED_USER_SIGN_UP).permitAll()
+	        	.antMatchers(SWAGGER_UI).permitAll()
 	        	.antMatchers("/*").authenticated()
 	        
 	        	.and().httpBasic();
