@@ -105,7 +105,20 @@ public class User {
 		this.isActive = isActive;
 	}
 
-	@Override
+	public User(){
+
+    }
+    public User(String loginId, String password, String firstName, String lastName, Integer age, String emailId, String contactNumber) {
+        this.loginId = loginId;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.emailId = emailId;
+        this.contactNumber = contactNumber;
+    }
+
+    @Override
 	public String toString() {
 		return String.format("User[id=%s, loginId= '%s', isActive='%s',"
 				+ " firstName='%s', lastName='%s', "
