@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Import;
 
 @Import({springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class})
 @SpringBootApplication
-@Profile("development")
 public class Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
