@@ -1,10 +1,10 @@
 package com.group9.columbus.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.group9.columbus.dto.UserDto;
@@ -25,7 +25,7 @@ public class UserManagementService implements UserDetailsService {
 	private UserRepository userRepository;
 	
 	@Autowired
-	PasswordEncoder encoder;
+	Md5PasswordEncoder encoder;
 
 	/* (non-Javadoc)
 	 * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
@@ -45,7 +45,7 @@ public class UserManagementService implements UserDetailsService {
 			
 			// activating the user
 			user.setActive(true);
-			user.setPassword(encoder.encode(user.getPassword()));
+			user.setPassword(encoder.encodePassword(user.getPassword(), null));
 			
 			UserDto userDto = new UserDto(userRepository.save(user));
 			return userDto;
