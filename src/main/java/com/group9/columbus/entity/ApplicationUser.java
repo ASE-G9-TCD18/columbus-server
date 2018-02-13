@@ -5,8 +5,8 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
-public class User {
+@Document(collection = "user")
+public class ApplicationUser {
 	
 	@Id
 	private String id;
@@ -105,10 +105,10 @@ public class User {
 		this.isActive = isActive;
 	}
 
-	public User(){
+	public ApplicationUser(){
 
     }
-    public User(String loginId, String password, String firstName, String lastName, Integer age, String emailId, String contactNumber) {
+    public ApplicationUser(String loginId, String password, String firstName, String lastName, Integer age, String emailId, String contactNumber) {
         this.loginId = loginId;
         this.password = password;
         this.firstName = firstName;

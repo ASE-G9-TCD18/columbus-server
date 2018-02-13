@@ -1,7 +1,7 @@
 package com.group9.columbus.test.login;
 
 import com.group9.columbus.Application;
-import com.group9.columbus.entity.User;
+import com.group9.columbus.entity.ApplicationUser;
 import com.group9.columbus.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -82,7 +82,7 @@ public class UserSignUpTest {
     public void signUpTest() throws Exception {
         mockMvc.perform(
                 post("/signup")
-                        .content(this.json(new User(loginId, pwd, "Test", "Test", 20,
+                        .content(this.json(new ApplicationUser(loginId, pwd, "Test", "Test", 20,
                                 "test@test.id", "000000")))
                         .contentType(contentType))
                 .andExpect(status().is2xxSuccessful());

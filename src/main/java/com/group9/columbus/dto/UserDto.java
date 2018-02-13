@@ -1,6 +1,7 @@
 package com.group9.columbus.dto;
 
-import com.group9.columbus.entity.User;
+import com.group9.columbus.entity.ApplicationUser;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Helper class for returning User Objects to client.
@@ -23,7 +24,7 @@ public class UserDto {
 	
 	private String contactNumber;
 
-	public UserDto(User user) {
+	public UserDto(ApplicationUser user) {
 		this.id = user.getId();
 		this.loginId = user.getLoginId();;
 		this.firstName = user.getFirstName();
@@ -32,7 +33,6 @@ public class UserDto {
 		this.emailId = user.getEmailId();
 		this.contactNumber = user.getEmailId();
 	}
-
 	public String getId() {
 		return id;
 	}

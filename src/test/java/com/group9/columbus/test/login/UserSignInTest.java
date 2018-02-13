@@ -1,8 +1,10 @@
 package com.group9.columbus.test.login;
 
 import com.group9.columbus.Application;
-import com.group9.columbus.entity.User;
+import com.group9.columbus.entity.ApplicationUser;
 import com.group9.columbus.repository.UserRepository;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +32,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 /**
  * Unit Test Class for LoginController
@@ -44,7 +47,8 @@ public class UserSignInTest {
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
-
+    // Matcher for Bearer Authorization
+    private Matcher<String> authorMatcher = Matchers.startsWith("Bearer");
 
     private MockMvc mockMvc;
     private HttpMessageConverter mappingJackson2HttpMessageConverter;
@@ -83,17 +87,21 @@ public class UserSignInTest {
 
     @Test
     public void signInTest() throws Exception {
+
         mockMvc.perform(
                 post("/signup")
-                        .content(this.json(new User(this.loginId, this.pwd, "Test", "Test", 20,
+                        .content(this.json(new ApplicationUser(this.loginId, this.pwd, "Test", "Test", 20,
                                 "test@test.id", "000000")))
                         .contentType(contentType))
                 .andExpect(status().is2xxSuccessful());
         mockMvc.perform(
-                get("/login")
-                .with(httpBasic(this.loginId, (this.pwd)))
+                post("/login").content(this.json(new ApplicationUser(this.loginId, this.pwd, "Test", "Test", 20,
+                        "test@test.id", "000000")))
+                .contentType(contentType)
                 )
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is2xxSuccessful())
+
+                .andExpect(header().string("Authorization", authorMatcher));
     }
 
     protected String json(Object o) throws IOException {
