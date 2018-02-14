@@ -1,6 +1,7 @@
 package com.group9.columbus.entity;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,6 +12,7 @@ public class User {
 	@Id
 	private String id;
 
+	@Pattern(regexp="[a-b]")
 	@NotNull(message="Login Id cannot be left null.")
 	private String loginId;
 	
