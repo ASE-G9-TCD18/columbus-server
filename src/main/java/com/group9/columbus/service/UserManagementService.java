@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.group9.columbus.dto.UserDto;
 import com.group9.columbus.entity.User;
 import com.group9.columbus.entity.UserPrincipal;
+import com.group9.columbus.exception.LoginIdChangedException;
 import com.group9.columbus.exception.UserExistsException;
 import com.group9.columbus.repository.UserRepository;
 
@@ -52,6 +53,21 @@ public class UserManagementService implements UserDetailsService {
 		} else {
 			throw new UserExistsException("User with loginId: "+user.getLoginId()+" already present!");
 		}
+		
+	}
+	
+	public User editUser(User user) throws LoginIdChangedException {
+		User dbUser = userRepository.findByLoginId(user.getLoginId());
+		if(dbUser == null) {
+			throw new UsernameNotFoundException("User with loginId '"+user.getLoginId()+"' does not exist.");
+		}
+		
+		if(!dbUser.getLoginId().equals(user.getLoginId()) && !dbUser.getId().equals(user.getId())) {
+			throw new LoginIdChangedException("LoginId change is not allowed!");
+		}
+		
+		user = userRepository.save(user);
+		return  user;
 		
 	}
 }

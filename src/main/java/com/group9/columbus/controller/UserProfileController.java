@@ -12,33 +12,33 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.group9.columbus.dto.UserDto;
 import com.group9.columbus.entity.User;
-import com.group9.columbus.exception.UserExistsException;
+import com.group9.columbus.exception.LoginIdChangedException;
 import com.group9.columbus.service.UserManagementService;
 import com.group9.columbus.utils.CommonUtils;
 import com.group9.columbus.utils.JsonUtils;
 
 @RestController
-@RequestMapping(value = "")
-public class UserManagementController {
+@RequestMapping(value = "/user/profile/")
+public class UserProfileController {
 
-	final static Logger logger = Logger.getLogger(UserManagementController.class);
+	final static Logger logger = Logger.getLogger(UserProfileController.class);
 	
 	@Autowired
 	UserManagementService userMgmtSvc;
 	
 	@RequestMapping(method = RequestMethod.PUT, consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> editUser(@Validated @RequestBody User user) {
-
-		UserDto userDto = null;
+		
 		try {
-			 userDto = userMgmtSvc.saveNewUser(user);
-		} catch (UserExistsException e) {
-			logger.error("User already exists.", e);
+			user = userMgmtSvc.editUser(user);
+		} catch (LoginIdChangedException e) {
+			logger.error(e);
+			
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(CommonUtils.createErrorResponseMessage(e.getMessage()));
 		}
 		
-		return JsonUtils.getJsonForResponse(userDto);
+		return JsonUtils.getJsonForResponse(new UserDto(user));
 	}
 	
 	
