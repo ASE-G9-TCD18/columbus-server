@@ -78,6 +78,7 @@ public class UserManagementService implements UserDetailsService {
 		}
 		
 		ApplicationUser dbUser = userRepository.findByLoginId(loginId);
+
 		if(dbUser == null) {
 			throw new UsernameNotFoundException("User with loginId '"+user.getLoginId()+"' does not exist.");
 		}

@@ -33,6 +33,7 @@ public class UserProfileController {
 		try {
 			user = userMgmtSvc.editUser(loginId, user);
 		} catch (UserManagementException e) {
+
 			logger.error(e);
 			
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -41,6 +42,5 @@ public class UserProfileController {
 		
 		return JsonUtils.getJsonForResponse(new UserDto(user));
 	}
-	
 	
 }

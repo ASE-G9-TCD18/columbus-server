@@ -1,6 +1,7 @@
 package com.group9.columbus.entity;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,23 +12,31 @@ public class ApplicationUser {
 	@Id
 	private String id;
 
+	@Pattern(regexp="[A-Za-z0-9]{4,}", message="LoginId can contain only alphanumeric characters."
+			+ " Minimum length 4 and maximum 10.")
 	@NotNull(message="Login Id cannot be left null.")
 	private String loginId;
 	
+	@Pattern(regexp="(?=.[a-z]{8,14})", message = "Password should be of minimum length 8 and max 14.")
 	@NotNull(message="Password cannot be left null.")
 	private String password;
 	
+	@Pattern(regexp="[a-zA-z]+", message="Please enter a valid name.")
 	@NotNull(message="First Name cannot be left null.")
 	private String firstName;
 	
+	@Pattern(regexp="[a-zA-z]*", message="Please enter a valid name.")
 	private String lastName;
 	
+	@Pattern(regexp="[0-9]{1,2}", message="Age can contain only numbers.")
 	@NotNull(message="Age cannot be left null.")
 	private Integer age;
 	
+	@Pattern(regexp="^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")
 	@NotNull(message="Email Id cannot be left null.")
 	private String emailId;
 	
+	@Pattern(regexp="[0-9]{10}", message = "Contact number should of lenght 10.")
 	@NotNull(message="Contact number cannot be left null.")
 	private String contactNumber;
 	
