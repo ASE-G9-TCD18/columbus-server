@@ -9,7 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.group9.columbus.dto.UserDto;
+import com.group9.columbus.exception.LoginIdChangedException;
 import com.group9.columbus.exception.UserExistsException;
+import com.group9.columbus.exception.UserManagementException;
 import com.group9.columbus.repository.UserRepository;
 
 import static java.util.Collections.emptyList;
@@ -66,6 +68,26 @@ public class UserManagementService implements UserDetailsService {
 		} else {
 			throw new UserExistsException("User with loginId: "+user.getLoginId()+" already present!");
 		}
+		
+	}
+	
+	public ApplicationUser editUser(String loginId, ApplicationUser user) throws UserManagementException {
+		
+		if(!loginId.equals(user.getLoginId())) {
+			throw new UserManagementException("Cannot change another user account. LoginId mismatch!");
+		}
+		
+		ApplicationUser dbUser = userRepository.findByLoginId(loginId);
+		if(dbUser == null) {
+			throw new UsernameNotFoundException("User with loginId '"+user.getLoginId()+"' does not exist.");
+		}
+		
+		if(!dbUser.getLoginId().equals(user.getLoginId()) && !dbUser.getId().equals(user.getId())) {
+			throw new LoginIdChangedException("LoginId change is not allowed!");
+		}
+		
+		user = userRepository.save(user);
+		return  user;
 		
 	}
 }

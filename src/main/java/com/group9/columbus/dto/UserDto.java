@@ -1,7 +1,6 @@
 package com.group9.columbus.dto;
 
 import com.group9.columbus.entity.ApplicationUser;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Helper class for returning User Objects to client.
