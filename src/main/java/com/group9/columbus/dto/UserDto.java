@@ -22,6 +22,8 @@ public class UserDto {
 	private String emailId;
 	
 	private String contactNumber;
+	
+	private Double userRating;
 
 	public UserDto(ApplicationUser user) {
 		this.id = user.getId();
@@ -31,6 +33,7 @@ public class UserDto {
 		this.age = user.getAge();
 		this.emailId = user.getEmailId();
 		this.contactNumber = user.getEmailId();
+		this.userRating = user.getUserRating();
 	}
 	public String getId() {
 		return id;
@@ -86,6 +89,12 @@ public class UserDto {
 
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
+	}
+	public Double getUserRating() {
+		return userRating;
+	}
+	public void setUserRating(Double userRating) {
+		this.userRating = userRating;
 	}
 	
 }

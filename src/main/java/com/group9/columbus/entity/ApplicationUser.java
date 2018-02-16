@@ -40,6 +40,9 @@ public class ApplicationUser {
 	@NotNull(message="Contact number cannot be left null.")
 	private String contactNumber;
 	
+	@NotNull
+	private Double userRating;
+	
 	private boolean isActive;
 	
 	public String getId() {
@@ -112,6 +115,14 @@ public class ApplicationUser {
 
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Double getUserRating() {
+		return userRating;
+	}
+
+	public void setUserRating(Double userRating) {
+		this.userRating = userRating;
 	}
 
 	public ApplicationUser(){
