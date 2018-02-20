@@ -30,7 +30,7 @@ public class ApplicationUser {
 	
 	@Pattern(regexp="[0-9]{1,2}", message="Age can contain only numbers.")
 	@NotNull(message="Age cannot be left null.")
-	private Integer age;
+	private String age;
 	
 	@Pattern(regexp="^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")
 	@NotNull(message="Email Id cannot be left null.")
@@ -85,11 +85,11 @@ public class ApplicationUser {
 		this.lastName = lastName;
 	}
 
-	public Integer getAge() {
+	public String getAge() {
 		return age;
 	}
 
-	public void setAge(Integer age) {
+	public void setAge(String age) {
 		this.age = age;
 	}
 
@@ -128,7 +128,7 @@ public class ApplicationUser {
 	public ApplicationUser(){
 
     }
-    public ApplicationUser(String loginId, String password, String firstName, String lastName, Integer age, String emailId, String contactNumber) {
+    public ApplicationUser(String loginId, String password, String firstName, String lastName, String age, String emailId, String contactNumber) {
         this.loginId = loginId;
         this.password = password;
         this.firstName = firstName;

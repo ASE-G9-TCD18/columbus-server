@@ -90,12 +90,12 @@ public class UserSignInTest {
 
         mockMvc.perform(
                 post("/signup")
-                        .content(this.json(new ApplicationUser(this.loginId, this.pwd, "Test", "Test", 20,
+                        .content(this.json(new ApplicationUser(this.loginId, this.pwd, "Test", "Test", "20",
                                 "test@test.id", "000000")))
                         .contentType(contentType))
                 .andExpect(status().is2xxSuccessful());
         mockMvc.perform(
-                post("/login").content(this.json(new ApplicationUser(this.loginId, this.pwd, "Test", "Test", 20,
+                post("/login").content(this.json(new ApplicationUser(this.loginId, this.pwd, "Test", "Test", "20",
                         "test@test.id", "000000")))
                 .contentType(contentType)
                 )
