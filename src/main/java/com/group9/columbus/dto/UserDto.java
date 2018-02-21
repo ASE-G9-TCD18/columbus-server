@@ -32,7 +32,7 @@ public class UserDto {
 		this.lastName = user.getLastName();
 		this.age = user.getAge();
 		this.emailId = user.getEmailId();
-		this.contactNumber = user.getEmailId();
+		this.contactNumber = user.getContactNumber();
 		this.userRating = user.getUserRating();
 	}
 	public String getId() {

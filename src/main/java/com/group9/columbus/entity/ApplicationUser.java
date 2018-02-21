@@ -40,7 +40,7 @@ public class ApplicationUser {
 	@NotNull(message="Contact number cannot be left null.")
 	private String contactNumber;
 	
-	@NotNull
+	@NotNull(message="User rating cannot be left null.")
 	private Double userRating;
 	
 	private boolean isActive;
