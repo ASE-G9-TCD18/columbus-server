@@ -17,7 +17,7 @@ public class ApplicationUser {
 	@NotNull(message="Login Id cannot be left null.")
 	private String loginId;
 	
-	@Pattern(regexp="(?=.[a-z]{8,14})", message = "Password should be of minimum length 8 and max 14.")
+	@Pattern(regexp="([a-zA-Z0-9]{8,14})", message = "Password should be of minimum length 8 and max 14.")
 	@NotNull(message="Password cannot be left null.")
 	private String password;
 	
