@@ -24,7 +24,7 @@ public class Trip {
 	@DBRef
 	private ApplicationUser admin;
 	
-	
-
+	@DBRef
+	private Conversation conversation;
 	
 }

@@ -47,12 +47,12 @@ public class UserManagementService implements UserDetailsService {
 		return new org.springframework.security.core.userdetails.User(user.getLoginId(), user.getPassword(), emptyList());
 	}
 
-	public UserDto findUserByUsername(String loginId) throws UsernameNotFoundException {
+	public ApplicationUser findUserByUsername(String loginId) throws UsernameNotFoundException {
 		ApplicationUser user = userRepository.findByLoginId(loginId);
 		if (user == null) {
 			throw new UsernameNotFoundException(loginId);
 		}
-		return new UserDto(user);
+		return user;
 	}
 
 	public UserDto saveNewUser(ApplicationUser user) throws UserExistsException {
@@ -87,8 +87,11 @@ public class UserManagementService implements UserDetailsService {
 			throw new LoginIdChangedException("LoginId change is not allowed!");
 		}
 		
-		user = userRepository.save(user);
-		return  user;
+		dbUser.setApplicationUserDetails(user);
+		
+		dbUser = userRepository.save(dbUser);
+		
+		return dbUser;
 		
 	}
 }
