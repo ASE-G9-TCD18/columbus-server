@@ -17,7 +17,7 @@ public class ApplicationUser {
 	@NotNull(message="Login Id cannot be left null.")
 	private String loginId;
 	
-	@Pattern(regexp="(?=.[a-z]{8,14})", message = "Password should be of minimum length 8 and max 14.")
+	@Pattern(regexp="([a-zA-Z0-9]{8,14})", message = "Password should be of minimum length 8 and max 14.")
 	@NotNull(message="Password cannot be left null.")
 	private String password;
 	
@@ -30,7 +30,7 @@ public class ApplicationUser {
 	
 	@Pattern(regexp="[0-9]{1,2}", message="Age can contain only numbers.")
 	@NotNull(message="Age cannot be left null.")
-	private Integer age;
+	private String age;
 	
 	@Pattern(regexp="^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")
 	@NotNull(message="Email Id cannot be left null.")
@@ -40,7 +40,7 @@ public class ApplicationUser {
 	@NotNull(message="Contact number cannot be left null.")
 	private String contactNumber;
 	
-	@NotNull
+	@NotNull(message="User rating cannot be left null.")
 	private Double userRating;
 	
 	private boolean isActive;
@@ -85,11 +85,11 @@ public class ApplicationUser {
 		this.lastName = lastName;
 	}
 
-	public Integer getAge() {
+	public String getAge() {
 		return age;
 	}
 
-	public void setAge(Integer age) {
+	public void setAge(String age) {
 		this.age = age;
 	}
 
@@ -128,7 +128,7 @@ public class ApplicationUser {
 	public ApplicationUser(){
 
     }
-    public ApplicationUser(String loginId, String password, String firstName, String lastName, Integer age, String emailId, String contactNumber) {
+    public ApplicationUser(String loginId, String password, String firstName, String lastName, String age, String emailId, String contactNumber) {
         this.loginId = loginId;
         this.password = password;
         this.firstName = firstName;
