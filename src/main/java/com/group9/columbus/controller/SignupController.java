@@ -29,7 +29,8 @@ public class SignupController {
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> signUp(@Validated @RequestBody ApplicationUser user) {
 
-		UserDto userDto = null;
+		//UserDto userDto = null;
+		ApplicationUser userDto = null;
 		try {
 			 userDto = userMgmtSvc.saveNewUser(user);
 		} catch (UserExistsException e) {

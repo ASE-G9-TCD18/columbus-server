@@ -19,9 +19,9 @@ public class ApplicationUser {
 			+ " Minimum length 4 and maximum 10.")
 	@NotNull(message = "Login Id cannot be left null.")
 	private String loginId;
-
-	@Pattern(regexp = "(?=.[a-z]{8,14})", message = "Password should be of minimum length 8 and max 14.")
-	// @NotNull(message="Password cannot be left null.")
+	
+	@Pattern(regexp="([a-zA-Z0-9]{8,14})", message = "Password should be of minimum length 8 and max 14.")
+	//@NotNull(message="Password cannot be left null.")
 	private String password;
 
 	@Pattern(regexp = "[a-zA-z]+", message = "Please enter a valid name.")
@@ -30,23 +30,24 @@ public class ApplicationUser {
 
 	@Pattern(regexp = "[a-zA-z]*", message = "Please enter a valid name.")
 	private String lastName;
-
-	@Pattern(regexp = "[0-9]{1,2}", message = "Age can contain only numbers.")
-	@NotNull(message = "Age cannot be left null.")
-	private Integer age;
-
-	@Pattern(regexp = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")
-	@NotNull(message = "Email Id cannot be left null.")
+	
+	@Pattern(regexp="[0-9]{1,2}", message="Age can contain only numbers.")
+	@NotNull(message="Age cannot be left null.")
+	private String age;
+	
+	@Pattern(regexp="^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")
+	@NotNull(message="Email Id cannot be left null.")
 	private String emailId;
 
 	@Pattern(regexp = "[0-9]{10}", message = "Contact number should of lenght 10.")
 	@NotNull(message = "Contact number cannot be left null.")
 	private String contactNumber;
 
-	@NotNull
+	
+	@NotNull(message="User rating cannot be left null.")
 	private Double userRating;
 
-	private boolean isActive;
+	private boolean active;
 
 	public String getId() {
 		return id;
@@ -64,7 +65,7 @@ public class ApplicationUser {
 		this.loginId = loginId;
 	}
 
-	@JsonIgnore
+	//@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
@@ -89,11 +90,11 @@ public class ApplicationUser {
 		this.lastName = lastName;
 	}
 
-	public Integer getAge() {
+	public String getAge() {
 		return age;
 	}
 
-	public void setAge(Integer age) {
+	public void setAge(String age) {
 		this.age = age;
 	}
 
@@ -114,11 +115,11 @@ public class ApplicationUser {
 	}
 
 	public boolean isActive() {
-		return isActive;
+		return active;
 	}
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public Double getUserRating() {
@@ -133,7 +134,7 @@ public class ApplicationUser {
 
 	}
 
-	public ApplicationUser(String loginId, String password, String firstName, String lastName, Integer age,
+	public ApplicationUser(String loginId, String password, String firstName, String lastName, String age,
 			String emailId, String contactNumber) {
 		this.loginId = loginId;
 		this.password = password;
@@ -174,7 +175,7 @@ public class ApplicationUser {
 	public String toString() {
 		return String.format(
 				"User[id=%s, loginId= '%s', isActive='%s'," + " firstName='%s', lastName='%s', " + "emailid='%s']", id,
-				loginId, isActive, firstName, lastName, emailId);
+				loginId, active, firstName, lastName, emailId);
 
 	}
 

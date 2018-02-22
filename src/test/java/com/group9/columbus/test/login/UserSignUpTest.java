@@ -82,7 +82,7 @@ public class UserSignUpTest {
     public void signUpTest() throws Exception {
         mockMvc.perform(
                 post("/signup")
-                        .content(this.json(new ApplicationUser(loginId, pwd, "Test", "Test", 20,
+                        .content(this.json(new ApplicationUser(loginId, pwd, "Test", "Test", "20",
                                 "test@test.id", "000000")))
                         .contentType(contentType))
                 .andExpect(status().is2xxSuccessful());
