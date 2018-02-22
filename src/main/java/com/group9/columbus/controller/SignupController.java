@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group9.columbus.dto.UserDto;
 import com.group9.columbus.exception.UserExistsException;
 import com.group9.columbus.service.UserManagementService;
 import com.group9.columbus.utils.CommonUtils;
