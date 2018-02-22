@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.group9.columbus.exception.LoginIdChangedException;
+import com.group9.columbus.exception.PasswordChangedException;
 import com.group9.columbus.exception.UserExistsException;
 import com.group9.columbus.exception.UserManagementException;
 import com.group9.columbus.repository.UserRepository;
@@ -59,7 +60,8 @@ public class UserManagementService implements UserDetailsService {
 
 	public ApplicationUser saveNewUser(ApplicationUser user) throws UserExistsException {
 		// Check if user already present
-		if (userRepository.findByLoginId(user.getLoginId()) == null) {
+		ApplicationUser temp = userRepository.findByLoginId(user.getLoginId());
+		if (temp == null) {
 
 			// activating the user
 			user.setActive(true);
@@ -79,11 +81,15 @@ public class UserManagementService implements UserDetailsService {
 		if (!loginId.equals(user.getLoginId())) {
 			throw new UserManagementException("Cannot change another user account. LoginId mismatch!");
 		}
-
+		
 		ApplicationUser dbUser = userRepository.findByLoginId(loginId);
 
 		if (dbUser == null) {
 			throw new UsernameNotFoundException("User with loginId '" + user.getLoginId() + "' does not exist.");
+		}
+		
+		if(!user.getPassword().equals(user.getPassword())) {
+			throw new PasswordChangedException("DataMismatch: Not allowed to change password from here!");
 		}
 
 		if (!dbUser.getLoginId().equals(user.getLoginId()) && !dbUser.getId().equals(user.getId())) {

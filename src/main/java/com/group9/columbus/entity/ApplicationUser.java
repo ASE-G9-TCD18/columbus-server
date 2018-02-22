@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.group9.columbus.dto.UserDto;
 
 @Document(collection = "user")
@@ -42,7 +43,6 @@ public class ApplicationUser {
 	@Pattern(regexp = "[0-9]{10}", message = "Contact number should of lenght 10.")
 	@NotNull(message = "Contact number cannot be left null.")
 	private String contactNumber;
-
 	
 	@NotNull(message="User rating cannot be left null.")
 	private Double userRating;
@@ -65,11 +65,12 @@ public class ApplicationUser {
 		this.loginId = loginId;
 	}
 
-	//@JsonIgnore
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
-
+	
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
