@@ -65,12 +65,12 @@ public class ApplicationUser {
 		this.loginId = loginId;
 	}
 
-	@JsonIgnore
+	//@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 	
-	@JsonProperty
+	//@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -135,8 +135,10 @@ public class ApplicationUser {
 
 	}
 
+
 	public ApplicationUser(String loginId, String password, String firstName, String lastName, String age,
-			String emailId, String contactNumber) {
+			String emailId, String contactNumber, Double userRating, boolean active) {
+		super();
 		this.loginId = loginId;
 		this.password = password;
 		this.firstName = firstName;
@@ -144,6 +146,8 @@ public class ApplicationUser {
 		this.age = age;
 		this.emailId = emailId;
 		this.contactNumber = contactNumber;
+		this.userRating = userRating;
+		this.active = active;
 	}
 
 	/**
