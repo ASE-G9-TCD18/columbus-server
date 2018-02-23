@@ -48,6 +48,7 @@ public class UserManagementService implements UserDetailsService {
 		}
 		return new org.springframework.security.core.userdetails.User(user.getLoginId(), user.getPassword(),
 				emptyList());
+		
 	}
 
 	public ApplicationUser findUserByUsername(String loginId) throws UsernameNotFoundException {

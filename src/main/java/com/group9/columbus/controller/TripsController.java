@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.group9.columbus.entity.ApplicationUser;
 import com.group9.columbus.repository.TripRepository;
+import com.group9.columbus.repository.UserRepository;
 import com.group9.columbus.utils.JsonUtils;
 
 
@@ -16,6 +18,9 @@ import com.group9.columbus.utils.JsonUtils;
 @RestController
 @RequestMapping(value = "/trips")
 public class TripsController {
+
+	@Autowired
+	UserRepository userRepository;
 
 	@Autowired
 	TripRepository tripRepository;
@@ -28,6 +33,11 @@ public class TripsController {
 	public ResponseEntity<String> getAllTrips() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = (String)auth.getPrincipal();
-		return JsonUtils.getJsonForResponse(tripRepository.findByTripUsersId(loginId));
+		
+		// fetch user from database
+		ApplicationUser user = userRepository.findByLoginId(loginId);
+		
+		
+		return JsonUtils.getJsonForResponse(tripRepository.findByTripUsersId(user.getId()));
 	}
 }
