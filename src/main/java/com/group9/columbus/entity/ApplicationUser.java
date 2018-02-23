@@ -6,26 +6,30 @@ import javax.validation.constraints.Pattern;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.group9.columbus.dto.UserDto;
+
 @Document(collection = "user")
 public class ApplicationUser {
-	
+
 	@Id
 	private String id;
 
-	@Pattern(regexp="[A-Za-z0-9]{4,}", message="LoginId can contain only alphanumeric characters."
+	@Pattern(regexp = "[A-Za-z0-9]{4,}", message = "LoginId can contain only alphanumeric characters."
 			+ " Minimum length 4 and maximum 10.")
-	@NotNull(message="Login Id cannot be left null.")
+	@NotNull(message = "Login Id cannot be left null.")
 	private String loginId;
 	
 	@Pattern(regexp="([a-zA-Z0-9]{8,14})", message = "Password should be of minimum length 8 and max 14.")
-	@NotNull(message="Password cannot be left null.")
+	//@NotNull(message="Password cannot be left null.")
 	private String password;
-	
-	@Pattern(regexp="[a-zA-z]+", message="Please enter a valid name.")
-	@NotNull(message="First Name cannot be left null.")
+
+	@Pattern(regexp = "[a-zA-z]+", message = "Please enter a valid name.")
+	@NotNull(message = "First Name cannot be left null.")
 	private String firstName;
-	
-	@Pattern(regexp="[a-zA-z]*", message="Please enter a valid name.")
+
+	@Pattern(regexp = "[a-zA-z]*", message = "Please enter a valid name.")
 	private String lastName;
 	
 	@Pattern(regexp="[0-9]{1,2}", message="Age can contain only numbers.")
@@ -35,16 +39,16 @@ public class ApplicationUser {
 	@Pattern(regexp="^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")
 	@NotNull(message="Email Id cannot be left null.")
 	private String emailId;
-	
-	@Pattern(regexp="[0-9]{10}", message = "Contact number should of lenght 10.")
-	@NotNull(message="Contact number cannot be left null.")
+
+	@Pattern(regexp = "[0-9]{10}", message = "Contact number should of lenght 10.")
+	@NotNull(message = "Contact number cannot be left null.")
 	private String contactNumber;
 	
 	@NotNull(message="User rating cannot be left null.")
 	private Double userRating;
-	
-	private boolean isActive;
-	
+
+	private boolean active;
+
 	public String getId() {
 		return id;
 	}
@@ -61,10 +65,12 @@ public class ApplicationUser {
 		this.loginId = loginId;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
-
+	
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -110,11 +116,11 @@ public class ApplicationUser {
 	}
 
 	public boolean isActive() {
-		return isActive;
+		return active;
 	}
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public Double getUserRating() {
@@ -125,24 +131,53 @@ public class ApplicationUser {
 		this.userRating = userRating;
 	}
 
-	public ApplicationUser(){
+	public ApplicationUser() {
 
-    }
-    public ApplicationUser(String loginId, String password, String firstName, String lastName, String age, String emailId, String contactNumber) {
-        this.loginId = loginId;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.emailId = emailId;
-        this.contactNumber = contactNumber;
-    }
-
-    @Override
-	public String toString() {
-		return String.format("User[id=%s, loginId= '%s', isActive='%s',"
-				+ " firstName='%s', lastName='%s', "
-				+ "emailid='%s']", id, loginId, isActive, firstName, lastName, emailId);
-		
 	}
+
+	public ApplicationUser(String loginId, String password, String firstName, String lastName, String age,
+			String emailId, String contactNumber) {
+		this.loginId = loginId;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.age = age;
+		this.emailId = emailId;
+		this.contactNumber = contactNumber;
+	}
+
+	/**
+	 * Helper method to set details from the UserDto to the ApplicationUser.
+	 * Required because the client might not send the password and other security details. If used directly,
+	 * it might override the user details in the database.
+	 * @param user
+	 */
+	@JsonIgnore
+	public void setApplicationUserDetails(UserDto user) {
+		this.firstName = user.getFirstName();
+		this.lastName = user.getLastName();
+		this.age = user.getAge();
+		this.emailId = user.getEmailId();
+		this.contactNumber = user.getContactNumber();
+		this.userRating = user.getUserRating();
+	}
+	
+	@JsonIgnore
+	public void setApplicationUserDetails(ApplicationUser user) {
+		this.firstName = user.getFirstName();
+		this.lastName = user.getLastName();
+		this.age = user.getAge();
+		this.emailId = user.getEmailId();
+		this.contactNumber = user.getContactNumber();
+		this.userRating = user.getUserRating();
+	}
+
+	@Override
+	public String toString() {
+		return String.format(
+				"User[id=%s, loginId= '%s', isActive='%s'," + " firstName='%s', lastName='%s', " + "emailid='%s']", id,
+				loginId, active, firstName, lastName, emailId);
+
+	}
+
 }
