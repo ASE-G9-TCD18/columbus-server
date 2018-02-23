@@ -37,7 +37,6 @@ public class TripsController {
 		// fetch user from database
 		ApplicationUser user = userRepository.findByLoginId(loginId);
 		
-		
 		return JsonUtils.getJsonForResponse(tripRepository.findByTripUsersId(user.getId()));
 	}
 }
