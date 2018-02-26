@@ -3,6 +3,8 @@ package com.group9.columbus.utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.util.HashMap;
+
 public class CommonUtils {
 
 	public static String createResponseMessage(String message) {

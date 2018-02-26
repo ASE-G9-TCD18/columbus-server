@@ -1,15 +1,16 @@
 package com.group9.columbus.security;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
-import org.springframework.stereotype.Component;
+import java.io.IOException;
 
 @Component
 public class RestAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
@@ -20,8 +21,21 @@ public class RestAuthenticationEntryPoint extends BasicAuthenticationEntryPoint 
       throws IOException, ServletException {
         response.addHeader("WWW-Authenticate", "Basic realm=" + getRealmName() + "");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        PrintWriter writer = response.getWriter();
-        writer.println("HTTP Status 401 - " + authEx.getMessage());
+        response.setContentType("application/json");
+
+        class ResponseTextWrapper{
+            String status;
+            String response;
+        }
+        ResponseTextWrapper failedResponse = new ResponseTextWrapper();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        failedResponse.status = "401";
+        failedResponse.response = "Authentication Required.";
+
+        String json = mapper.writeValueAsString(failedResponse);
+        response.getWriter().write(json);
+        response.flushBuffer();
     }
 	
 	 @Override
