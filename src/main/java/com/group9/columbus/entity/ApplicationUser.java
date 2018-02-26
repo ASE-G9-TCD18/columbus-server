@@ -7,7 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.group9.columbus.dto.UserDto;
 
 @Document(collection = "user")
@@ -182,6 +181,27 @@ public class ApplicationUser {
 				"User[id=%s, loginId= '%s', isActive='%s'," + " firstName='%s', lastName='%s', " + "emailid='%s']", id,
 				loginId, active, firstName, lastName, emailId);
 
+	}
+	
+	/**
+	 * Returns a deep copy of {@link ApplicationUser}.
+	 * @return
+	 */
+	@JsonIgnore
+	public ApplicationUser getCopy() {
+		ApplicationUser user = new ApplicationUser();
+		user.id = user.id;
+		user.loginId = loginId;
+		user.password = password;
+		user.firstName = firstName;
+		user.lastName = lastName;
+		user.age = age;
+		user.emailId = emailId;
+		user.contactNumber = contactNumber;
+		user.userRating = userRating;
+		user.active = active;
+		
+		return user;
 	}
 
 }
