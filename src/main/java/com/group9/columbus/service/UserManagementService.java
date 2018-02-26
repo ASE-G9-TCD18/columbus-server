@@ -89,7 +89,7 @@ public class UserManagementService implements UserDetailsService {
 			throw new UsernameNotFoundException("User with loginId '" + user.getLoginId() + "' does not exist.");
 		}
 		
-		if(!user.getPassword().equals(user.getPassword())) {
+		if(!user.getPassword().equals(dbUser.getPassword())) {
 			throw new PasswordChangedException("DataMismatch: Not allowed to change password from here!");
 		}
 

@@ -14,10 +14,16 @@ public class Trip {
 	@Id
 	private String id;
 	
+	private String tripId;
+	
 	private TripType tripType;
+	
+	private List<Preference> preferences;
 	 
 	@DBRef
-	private List<ApplicationUser> tripUsers;
+	private List<ApplicationUser> tripUsersIds;
+	
+	private List<String> tripUsersLoginIds;
 	
 	private List<TripStop> tripStops;
 	

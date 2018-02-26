@@ -16,7 +16,7 @@ import com.group9.columbus.utils.JsonUtils;
 
 
 @RestController
-@RequestMapping(value = "/trips")
+@RequestMapping(value = "/trips/{loginId}")
 public class TripsController {
 
 	@Autowired
