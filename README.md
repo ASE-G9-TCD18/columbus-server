@@ -10,4 +10,5 @@ mvn clean package
 ## Postman Request collection:
 https://www.getpostman.com/collections/61cc634a6b549795cf42
 
-
+## Test Properties
+spring.data.mongodb.port=0

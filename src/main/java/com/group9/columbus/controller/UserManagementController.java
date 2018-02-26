@@ -24,6 +24,10 @@ public class UserManagementController {
 	@Autowired
 	UserManagementService userMgmtSvc;
 
+	/**
+	 * @param loginId
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getResponse(@PathVariable("loginId") String loginId) {
 		ApplicationUser user = userMgmtSvc.findUserByUsername(loginId);
@@ -31,6 +35,11 @@ public class UserManagementController {
 		return JsonUtils.getJsonForResponse(user);
 	}
 
+	/**
+	 * @param loginId
+	 * @param user
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.PUT, consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> editUser(@PathVariable("loginId") String loginId,
 			@Validated @RequestBody ApplicationUser user) {

@@ -7,7 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.group9.columbus.dto.UserDto;
 
 @Document(collection = "user")
@@ -65,12 +64,12 @@ public class ApplicationUser {
 		this.loginId = loginId;
 	}
 
-	@JsonIgnore
+	//@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 	
-	@JsonProperty
+	//@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -135,8 +134,10 @@ public class ApplicationUser {
 
 	}
 
+
 	public ApplicationUser(String loginId, String password, String firstName, String lastName, String age,
-			String emailId, String contactNumber) {
+			String emailId, String contactNumber, Double userRating, boolean active) {
+		super();
 		this.loginId = loginId;
 		this.password = password;
 		this.firstName = firstName;
@@ -144,6 +145,8 @@ public class ApplicationUser {
 		this.age = age;
 		this.emailId = emailId;
 		this.contactNumber = contactNumber;
+		this.userRating = userRating;
+		this.active = active;
 	}
 
 	/**
@@ -178,6 +181,27 @@ public class ApplicationUser {
 				"User[id=%s, loginId= '%s', isActive='%s'," + " firstName='%s', lastName='%s', " + "emailid='%s']", id,
 				loginId, active, firstName, lastName, emailId);
 
+	}
+	
+	/**
+	 * Returns a deep copy of {@link ApplicationUser}.
+	 * @return
+	 */
+	@JsonIgnore
+	public ApplicationUser getCopy() {
+		ApplicationUser user = new ApplicationUser();
+		user.id = user.id;
+		user.loginId = loginId;
+		user.password = password;
+		user.firstName = firstName;
+		user.lastName = lastName;
+		user.age = age;
+		user.emailId = emailId;
+		user.contactNumber = contactNumber;
+		user.userRating = userRating;
+		user.active = active;
+		
+		return user;
 	}
 
 }
