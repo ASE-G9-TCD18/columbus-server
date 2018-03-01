@@ -1,9 +1,13 @@
 package com.group9.columbus.entity;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,6 +22,7 @@ public class ApplicationUser {
 	@Pattern(regexp = "[A-Za-z0-9]{4,}", message = "LoginId can contain only alphanumeric characters."
 			+ " Minimum length 4 and maximum 10.")
 	@NotNull(message = "Login Id cannot be left null.")
+	@Indexed(unique = true)
 	private String loginId;
 	
 	@Pattern(regexp="([a-zA-Z0-9]{8,14})", message = "Password should be of minimum length 8 and max 14.")
@@ -47,6 +52,9 @@ public class ApplicationUser {
 	private Double userRating;
 
 	private boolean active;
+	
+	@DBRef(lazy = true)
+	private List<Trip> trips;
 
 	public String getId() {
 		return id;
@@ -128,6 +136,14 @@ public class ApplicationUser {
 
 	public void setUserRating(Double userRating) {
 		this.userRating = userRating;
+	}
+
+	public List<Trip> getTrips() {
+		return trips;
+	}
+
+	public void setTrips(List<Trip> trips) {
+		this.trips = trips;
 	}
 
 	public ApplicationUser() {

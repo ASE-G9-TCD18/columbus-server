@@ -1,12 +1,14 @@
 package com.group9.columbus.entity;
 
-import com.mongodb.client.model.geojson.Point;
+import org.springframework.data.geo.Point;
 
 public class TripStop {
 	
 	private int sequenceNumber;
 	
-	private Point coordinates;
+	//private GeoPoint coordinate;
+	
+	private Point coordinate;
 
 	public int getSequenceNumber() {
 		return sequenceNumber;
@@ -16,11 +18,21 @@ public class TripStop {
 		this.sequenceNumber = sequenceNumber;
 	}
 
-	public Point getCoordinates() {
-		return coordinates;
+	public Point getCoordinate() {
+		return coordinate;
 	}
 
-	public void setCoordinates(Point coordinates) {
-		this.coordinates = coordinates;
+	public void setCoordinate(Point coordinate) {
+		this.coordinate = coordinate;
 	}
+
+//	public GeoPoint getCoordinate() {
+//		return coordinate;
+//	}
+//
+//	public void setCoordinate(GeoPoint coordinate) {
+//		this.coordinate = coordinate;
+//	}
+	
+	
 }

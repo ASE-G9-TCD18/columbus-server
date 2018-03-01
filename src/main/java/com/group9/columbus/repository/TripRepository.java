@@ -8,5 +8,5 @@ import com.group9.columbus.entity.Trip;
 
 public interface TripRepository extends MongoRepository<Trip, String> {
 	
-	public List<Trip> findByTripUsersId(String loginId);
+	public List<Trip> findByTripUsersLoginIds(String loginId);
 }

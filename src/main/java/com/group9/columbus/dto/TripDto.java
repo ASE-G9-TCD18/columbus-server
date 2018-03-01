@@ -42,4 +42,20 @@ public class TripDto {
 	public void setTripStops(List<TripStop> tripStops) {
 		this.tripStops = tripStops;
 	}
+
+	public List<Preference> getPreferences() {
+		return preferences;
+	}
+
+	public void setPreferences(List<Preference> preferences) {
+		this.preferences = preferences;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
 }
