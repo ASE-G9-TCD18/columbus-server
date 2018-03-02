@@ -6,8 +6,6 @@ public class TripStop {
 	
 	private int sequenceNumber;
 	
-	//private GeoPoint coordinate;
-	
 	private Point coordinate;
 
 	public int getSequenceNumber() {
@@ -26,13 +24,4 @@ public class TripStop {
 		this.coordinate = coordinate;
 	}
 
-//	public GeoPoint getCoordinate() {
-//		return coordinate;
-//	}
-//
-//	public void setCoordinate(GeoPoint coordinate) {
-//		this.coordinate = coordinate;
-//	}
-	
-	
 }

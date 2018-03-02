@@ -2,6 +2,7 @@ package com.group9.columbus.controller;
 
 import java.awt.Point;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,31 +13,39 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.group9.columbus.dto.TripDto;
-import com.group9.columbus.entity.ApplicationUser;
 import com.group9.columbus.entity.Trip;
+import com.group9.columbus.exception.TripManagementException;
 import com.group9.columbus.service.TripService;
+import com.group9.columbus.utils.CommonUtils;
 import com.group9.columbus.utils.JsonUtils;
 
 /**
  * This class has Api for Trip CURD operations.
+ * 
  * @author amit
  */
 @RestController
-@RequestMapping(value = "/trip/{loginId}")
+@RequestMapping(value = "/trip")
 public class TripController {
+
+	private Logger logger = Logger.getLogger(TripController.class);
+
+	@Autowired
+	private CommonUtils commonUtils;
 
 	@Autowired
 	private TripService tripService;
 
 	/**
 	 * API to create a trip
+	 * 
 	 * @param loginId
 	 * @param tripDto
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public ResponseEntity<String> createTrip(@PathVariable("loginId") String loginId,
-			@Validated @RequestBody TripDto tripDto) {
+	public ResponseEntity<String> createTrip(@Validated @RequestBody TripDto tripDto) {
+		String loginId = commonUtils.getLoggedInUserLoginId();
 
 		// forward this request to the TripService
 		Trip trip = tripService.createTrip(loginId, tripDto);
@@ -45,12 +54,33 @@ public class TripController {
 
 	}
 
+	/**
+	 * API that returns Trip for currently logged in User.
+	 * @param tripId
+	 * @return
+	 */
 	@RequestMapping(path = "/{tripId}", method = RequestMethod.GET, produces = "application/json")
-	public void getTrip(@PathVariable("loginId") String loginId, @Validated @RequestBody ApplicationUser user) {
-
+	public ResponseEntity<String> getTrip(@PathVariable("tripId") String tripId) {
+		String loginId = commonUtils.getLoggedInUserLoginId();
+		Trip trip = null;
+		
+		try {
+			trip = tripService.getTripById(loginId, tripId);
+			logger.info("Request for trip details for tripId ("+tripId+") by ("+loginId+") processed successfully.");
+			
+		} catch (TripManagementException tme) {
+			logger.error(tme);
+			CommonUtils.createErrorResponseMessage(tme.getMessage());
+		}
+		
+		return JsonUtils.getJsonForResponse(trip);
 	}
 	
-	
+	@RequestMapping(path = "/{tripId}/join", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<String> joinTripByTripId(@PathVariable("tripId") String tripId) {
+		
+	}
+
 	@RequestMapping(path = "/temp", method = RequestMethod.GET, produces = "application/json")
 	public Point testGeo() {
 		Point pt = new Point();
