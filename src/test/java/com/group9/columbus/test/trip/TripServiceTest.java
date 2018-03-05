@@ -1,32 +1,25 @@
 package com.group9.columbus.test.trip;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.geo.Point;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
-import com.group9.columbus.controller.TripController;
 import com.group9.columbus.dto.TripDto;
+import com.group9.columbus.entity.ApplicationUser;
 import com.group9.columbus.entity.Preference;
 import com.group9.columbus.entity.Trip;
 import com.group9.columbus.entity.TripStop;
@@ -34,40 +27,30 @@ import com.group9.columbus.enums.Gender;
 import com.group9.columbus.enums.PreferenceType;
 import com.group9.columbus.enums.Repeat;
 import com.group9.columbus.enums.TripType;
-import com.group9.columbus.repository.TripRepository;
+import com.group9.columbus.repository.UserRepository;
 import com.group9.columbus.service.TripService;
 import com.group9.columbus.test.TestConfig;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 @SpringBootTest(classes = { TestConfig.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 public class TripServiceTest {
-	
-	@Autowired
-	@Qualifier("mvc")
-	private MockMvc mvc;
-	
-	@Autowired
-	@Qualifier("httpMsgConverter")
-	private HttpMessageConverter httpMsgConverter;
 
-	@Autowired
-	private TripController tripController;
-	
-	@Autowired
-	private TripRepository tripRepo;
+	Logger logger = Logger.getLogger(TripServiceTest.class);
 	
 	@Autowired
 	private TripService tripService;
+
+	@MockBean
+	private UserRepository userRepo;
 	
 	String loginId = "testuser";
 	String password = "testuser";
 	
+	private ApplicationUser user;
 	private TripDto tripDto;
 	private SimpleDateFormat sdf;
 	
@@ -75,11 +58,24 @@ public class TripServiceTest {
 	public void init() {
 		sdf = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 		tripDto = new TripDto();
+		
+		user = new ApplicationUser();
+		user.setLoginId(loginId);
+		user.setPassword(password);
+		user.setActive(true);
+		user.setAge("40");
+		user.setContactNumber("1234567890");
+		user.setEmailId("temp@example.com");
+		user.setFirstName("ABC");
+		user.setLastName("Agrahari");
+		user.setUserRating(5.0);
+		
+		given(userRepo.findByLoginId(loginId)).willReturn(user);
 	}
 	
 	@Test
 	public void createTrip() {
-		MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
+		logger.info("Running create trip test");
 		
 		List<Preference> preferences = new ArrayList<>();
 		Preference startTimePref = new Preference(PreferenceType.START_TIME, "20:20:20");
@@ -113,7 +109,9 @@ public class TripServiceTest {
 		
 		// Assertions
 		assertThat(actual.getConversation()).isNotEqualTo(null);
-		assert
-				
+		logger.info("Conversation created successfully inside trip.");
+		
+		assertThat(actual.getTripId()).isNotEqualTo(null);
+		logger.info("Trip has been assigned a trip id.");		
 	}
 }
