@@ -1,6 +1,5 @@
 package com.group9.columbus.dto;
 
-import java.util.Date;
 import java.util.List;
 
 import com.group9.columbus.entity.Preference;
@@ -11,13 +10,11 @@ public class TripDto {
 	
 	private TripType tripType;
 	
-	private String loginId;
-	
 	private List<TripStop> tripStops;
 	
 	private List<Preference> preferences;
 	
-	private Date timestamp;
+	private String timestamp;
 
 	public TripType getTripType() {
 		return tripType;
@@ -25,14 +22,6 @@ public class TripDto {
 
 	public void setTripType(TripType tripType) {
 		this.tripType = tripType;
-	}
-
-	public String getLoginId() {
-		return loginId;
-	}
-
-	public void setLoginId(String loginId) {
-		this.loginId = loginId;
 	}
 
 	public List<TripStop> getTripStops() {
@@ -51,11 +40,11 @@ public class TripDto {
 		this.preferences = preferences;
 	}
 
-	public Date getTimestamp() {
+	public String getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Date timestamp) {
+	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 	}
 }

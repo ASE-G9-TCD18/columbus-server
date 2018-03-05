@@ -78,6 +78,8 @@ public class TripController {
 	
 	@RequestMapping(path = "/{tripId}/join", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> joinTripByTripId(@PathVariable("tripId") String tripId) {
+		String loginId = commonUtils.getLoggedInUserLoginId();
+		Trip trip = null;
 		
 	}
 

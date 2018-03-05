@@ -8,6 +8,15 @@ public class TripStop {
 	
 	private Point coordinate;
 
+	public TripStop() {
+	}
+	
+	public TripStop(int sequenceNumber, Point coordinate) {
+		super();
+		this.sequenceNumber = sequenceNumber;
+		this.coordinate = coordinate;
+	}
+
 	public int getSequenceNumber() {
 		return sequenceNumber;
 	}
