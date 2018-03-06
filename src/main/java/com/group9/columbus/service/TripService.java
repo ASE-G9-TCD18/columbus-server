@@ -14,6 +14,7 @@ import com.group9.columbus.dto.TripDto;
 import com.group9.columbus.entity.ApplicationUser;
 import com.group9.columbus.entity.Conversation;
 import com.group9.columbus.entity.Trip;
+import com.group9.columbus.exception.IncorrectValueFormat;
 import com.group9.columbus.exception.TripRequestedByUnAuthorizedUserException;
 import com.group9.columbus.repository.TripRepository;
 
@@ -29,17 +30,24 @@ public class TripService {
 	@Autowired
 	TripRepository tripRepo;
 	
+	@Autowired
+	TripValidatorService tripValidatorService;
+	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
 	
 	/**
 	 * Service method that creates a daily trip when requested by the user.
 	 * @param loginId
 	 * @param user
+	 * @throws IncorrectValueFormat 
 	 */
 	@Transactional
-	public Trip createTrip(String loginId, TripDto tripDto) {
+	public Trip createTrip(String loginId, TripDto tripDto) throws IncorrectValueFormat {
 		Conversation conversation = convService.createConversation();
 		ApplicationUser user = userMgmtService.findUserByUsername(loginId);
+		
+		// Validate TripDto
+		tripValidatorService.validateTripCreationDetails(tripDto);
 		
 		List<String> appUsers = new ArrayList<>();
 		appUsers.add(user.getLoginId());
