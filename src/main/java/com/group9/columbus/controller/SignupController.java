@@ -1,5 +1,6 @@
 package com.group9.columbus.controller;
 
+import com.group9.columbus.entity.ApplicationUser;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group9.columbus.dto.UserDto;
-import com.group9.columbus.entity.User;
 import com.group9.columbus.exception.UserExistsException;
 import com.group9.columbus.service.UserManagementService;
 import com.group9.columbus.utils.CommonUtils;
@@ -27,9 +26,10 @@ public class SignupController {
 	UserManagementService userMgmtSvc;
 
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public ResponseEntity<String> signUp(@Validated @RequestBody User user) {
+	public ResponseEntity<String> signUp(@Validated @RequestBody ApplicationUser user) {
 
-		UserDto userDto = null;
+		//UserDto userDto = null;
+		ApplicationUser userDto = null;
 		try {
 			 userDto = userMgmtSvc.saveNewUser(user);
 		} catch (UserExistsException e) {
