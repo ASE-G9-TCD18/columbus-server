@@ -9,6 +9,7 @@ import com.group9.columbus.entity.Preference;
 import com.group9.columbus.enums.PreferenceType;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.group9.columbus.dto.TripDto;
 import com.group9.columbus.entity.Trip;
+import com.group9.columbus.exception.IncorrectValueFormat;
 import com.group9.columbus.exception.TripManagementException;
 import com.group9.columbus.service.TripService;
 import com.group9.columbus.utils.CommonUtils;
@@ -52,10 +54,14 @@ public class TripController {
 		String loginId = commonUtils.getLoggedInUserLoginId();
 
 		// forward this request to the TripService
-		Trip trip = tripService.createTrip(loginId, tripDto);
-
-		return JsonUtils.getJsonForResponse(trip);
-
+		Trip trip;
+		try {
+			trip = tripService.createTrip(loginId, tripDto);
+			return JsonUtils.getJsonForResponse(trip);
+		} catch (IncorrectValueFormat e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(CommonUtils.createErrorResponseMessage(e.getMessage()));
+		}
 	}
 
 	/**

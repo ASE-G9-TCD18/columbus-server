@@ -24,7 +24,7 @@ public class ApplicationUser {
 	private String loginId;
 	
 
-	//@NotNull(message="Password cannot be left null.")
+	@NotNull(message="Password cannot be left null.")
 	private String password;
 
 	@NotNull(message = "First Name cannot be left null.")

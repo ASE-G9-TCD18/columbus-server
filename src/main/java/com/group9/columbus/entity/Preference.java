@@ -5,16 +5,16 @@ import com.group9.columbus.enums.PreferenceType;
 /**
  * A preference POJO
  */
-public class Preference<T> {
+public class Preference<String> {
 	
 	private PreferenceType preferenceType;
 	
-	private T value;
+	private String value;
 
 	public Preference() {
 	}
 	
-	public Preference(PreferenceType preferenceType, T value) {
+	public Preference(PreferenceType preferenceType, String value) {
 		super();
 		this.preferenceType = preferenceType;
 		this.value = value;
@@ -28,11 +28,11 @@ public class Preference<T> {
 		this.preferenceType = preferenceType;
 	}
 
-	public T getValue() {
+	public String getValue() {
 		return value;
 	}
 
-	public void setValue(T value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 
