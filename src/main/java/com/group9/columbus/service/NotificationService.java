@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
-	public boolean sendNotification(String message) {
+	public boolean sendNewJoinRequestNotification(String fcmId, String requestFrom) {
 		
 		// Some logic to send notification
 		

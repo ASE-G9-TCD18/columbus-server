@@ -120,6 +120,7 @@ public class TripServiceTest {
 	public void createTripFailure() throws IncorrectValueFormat {
 		logger.info("Running create trip test for failure");
 		List<Preference> preferences = new ArrayList<>();
+		// Wrong start time format
 		Preference startTimePref = new Preference(PreferenceType.START_TIME, "202020");
 		Preference startDatePref = new Preference(PreferenceType.START_DATE, "2017-03-17");
 		Preference endDatePref = new Preference(PreferenceType.END_DATE, "2017-03-20");

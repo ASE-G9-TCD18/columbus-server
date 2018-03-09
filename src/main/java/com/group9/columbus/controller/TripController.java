@@ -87,6 +87,7 @@ public class TripController {
 		String loginId = commonUtils.getLoggedInUserLoginId();
 		Trip trip = null;
 		
+		return null;
 	}
 
 	@RequestMapping(path = "/temp", method = RequestMethod.GET, produces = "application/json")
