@@ -85,7 +85,7 @@ public class TripController {
 		
 		return JsonUtils.getJsonForResponse(trip);
 	}
-	
+
 	@RequestMapping(path = "/{tripId}/join", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> joinTripByTripId(@PathVariable("tripId") String tripId) {
 		String loginId = commonUtils.getLoggedInUserLoginId();
@@ -98,6 +98,7 @@ public class TripController {
 		}
 		return ResponseEntity.ok("User: "+loginId+" successfully joined the trip: "+tripId);
 	}
+
 
 	@RequestMapping(path="/criteria", method=RequestMethod.GET, produces="application/json")
 	public ResponseEntity<List<Preference>> getCriteria(){

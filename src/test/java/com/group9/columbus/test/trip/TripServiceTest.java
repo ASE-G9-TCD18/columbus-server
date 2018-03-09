@@ -113,7 +113,7 @@ public class TripServiceTest {
 		logger.info("Conversation created successfully inside trip.");
 		
 		assertThat(actual.getTripId()).isNotEqualTo(null);
-		logger.info("Trip has been assigned a trip id.");		
+		logger.info("Trip has been assigned a trip id.");
 	}
 	
 //	@Test(expected=IncorrectValueFormat.class)

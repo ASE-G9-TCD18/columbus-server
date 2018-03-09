@@ -36,7 +36,7 @@ public class TripService {
 	TripRepository tripRepo;
 
 	Logger logger = Logger.getLogger(this.getClass());
-	
+
 //	@Autowired
 //	TripValidatorService tripValidatorService;
 	
@@ -47,14 +47,16 @@ public class TripService {
 	 * @param loginId user login id
 	 * @param tripDto  trip Dto
 	 * @throws IncorrectValueFormat
+
 	 */
 	@Transactional
 	public Trip createTrip(String loginId, TripDto tripDto) throws IncorrectValueFormat {
 		Conversation conversation = convService.createConversation();
 		ApplicationUser user = userMgmtService.findUserByUsername(loginId);
-		
+
 //		// Validate TripDto
 //		tripValidatorService.validateTripCreationDetails(tripDto);
+
 		
 		List<String> appUsers = new ArrayList<>();
 		appUsers.add(user.getLoginId());
