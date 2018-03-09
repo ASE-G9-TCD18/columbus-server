@@ -40,8 +40,7 @@ public class TripController {
 
 	/**
 	 * API to create a trip
-	 * 
-	 * @param loginId
+	 *
 	 * @param tripDto
 	 * @return
 	 */
@@ -82,12 +81,12 @@ public class TripController {
 		return JsonUtils.getJsonForResponse(trip);
 	}
 	
-	@RequestMapping(path = "/{tripId}/join", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<String> joinTripByTripId(@PathVariable("tripId") String tripId) {
-		String loginId = commonUtils.getLoggedInUserLoginId();
-		Trip trip = null;
-		
-	}
+//	@RequestMapping(path = "/{tripId}/join", method = RequestMethod.GET, produces = "application/json")
+//	public ResponseEntity<String> joinTripByTripId(@PathVariable("tripId") String tripId) {
+////		String loginId = commonUtils.getLoggedInUserLoginId();
+////		Trip trip = null;
+//
+//	}
 
 	@RequestMapping(path = "/temp", method = RequestMethod.GET, produces = "application/json")
 	public Point testGeo() {
