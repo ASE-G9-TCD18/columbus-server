@@ -19,37 +19,32 @@ public class ApplicationUser {
 	@Id
 	private String id;
 
-	@Pattern(regexp = "[A-Za-z0-9]{4,}", message = "LoginId can contain only alphanumeric characters."
-			+ " Minimum length 4 and maximum 10.")
 	@NotNull(message = "Login Id cannot be left null.")
 	@Indexed(unique = true)
 	private String loginId;
 	
-	@Pattern(regexp="([a-zA-Z0-9]{8,14})", message = "Password should be of minimum length 8 and max 14.")
-	//@NotNull(message="Password cannot be left null.")
+
+	@NotNull(message="Password cannot be left null.")
 	private String password;
 
-	@Pattern(regexp = "[a-zA-z]+", message = "Please enter a valid name.")
 	@NotNull(message = "First Name cannot be left null.")
 	private String firstName;
 
-	@Pattern(regexp = "[a-zA-z]*", message = "Please enter a valid name.")
 	private String lastName;
-	
-	@Pattern(regexp="[0-9]{1,2}", message="Age can contain only numbers.")
+
 	@NotNull(message="Age cannot be left null.")
 	private String age;
-	
-	@Pattern(regexp="^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")
+
 	@NotNull(message="Email Id cannot be left null.")
 	private String emailId;
 
-	@Pattern(regexp = "[0-9]{10}", message = "Contact number should of lenght 10.")
 	@NotNull(message = "Contact number cannot be left null.")
 	private String contactNumber;
 	
 	@NotNull(message="User rating cannot be left null.")
 	private Double userRating;
+
+	private String deviceId;
 
 	private boolean active;
 	
@@ -152,7 +147,7 @@ public class ApplicationUser {
 
 
 	public ApplicationUser(String loginId, String password, String firstName, String lastName, String age,
-			String emailId, String contactNumber, Double userRating, boolean active) {
+			String emailId, String contactNumber, Double userRating, boolean active, String deviceId) {
 		super();
 		this.loginId = loginId;
 		this.password = password;
@@ -163,6 +158,7 @@ public class ApplicationUser {
 		this.contactNumber = contactNumber;
 		this.userRating = userRating;
 		this.active = active;
+		this.deviceId = deviceId;
 	}
 
 	/**
@@ -220,4 +216,11 @@ public class ApplicationUser {
 		return user;
 	}
 
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
+	}
 }
