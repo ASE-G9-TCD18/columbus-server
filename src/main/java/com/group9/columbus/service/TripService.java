@@ -37,8 +37,8 @@ public class TripService {
 
 	Logger logger = Logger.getLogger(this.getClass());
 	
-	@Autowired
-	TripValidatorService tripValidatorService;
+//	@Autowired
+//	TripValidatorService tripValidatorService;
 	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
 
@@ -53,8 +53,8 @@ public class TripService {
 		Conversation conversation = convService.createConversation();
 		ApplicationUser user = userMgmtService.findUserByUsername(loginId);
 		
-		// Validate TripDto
-		tripValidatorService.validateTripCreationDetails(tripDto);
+//		// Validate TripDto
+//		tripValidatorService.validateTripCreationDetails(tripDto);
 		
 		List<String> appUsers = new ArrayList<>();
 		appUsers.add(user.getLoginId());

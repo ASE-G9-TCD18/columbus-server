@@ -116,38 +116,38 @@ public class TripServiceTest {
 		logger.info("Trip has been assigned a trip id.");		
 	}
 	
-	@Test(expected=IncorrectValueFormat.class)
-	public void createTripFailure() throws IncorrectValueFormat {
-		logger.info("Running create trip test for failure");
-		List<Preference> preferences = new ArrayList<>();
-		Preference startTimePref = new Preference(PreferenceType.START_TIME, "202020");
-		Preference startDatePref = new Preference(PreferenceType.START_DATE, "2017-03-17");
-		Preference endDatePref = new Preference(PreferenceType.END_DATE, "2017-03-20");
-		Preference repeatPref = new Preference(PreferenceType.REPEAT, Repeat.WEEKDAY.toString());
-		Preference genderPref = new Preference(PreferenceType.GENDER, Gender.M.toString());
-		Preference agePref = new Preference(PreferenceType.AGE_RANGE, "20-30");
-		
-		preferences.add(startTimePref);
-		preferences.add(startDatePref);
-		preferences.add(endDatePref);
-		preferences.add(repeatPref);
-		preferences.add(genderPref);
-		preferences.add(agePref);
-		
-		List<TripStop> tripStops = new ArrayList<>();
-		TripStop startPos = new TripStop(1,new Point(53.2711963, -6.2045213)); // Central Park 
-		TripStop endPos = new TripStop(1,new Point(53.3437967, -6.2567603)); // Trinity
-
-		tripStops.add(startPos);
-		tripStops.add(endPos);
-		
-		tripDto.setPreferences(preferences);
-		tripDto.setTimestamp(sdf.format(new Date()));
-		tripDto.setTripType(TripType.SCHEDULED);
-		tripDto.setTripStops(tripStops);
-		
-		// Actual
-		Trip actual = tripService.createTrip(loginId, tripDto);
-
-	}
+//	@Test(expected=IncorrectValueFormat.class)
+//	public void createTripFailure() throws IncorrectValueFormat {
+//		logger.info("Running create trip test for failure");
+//		List<Preference> preferences = new ArrayList<>();
+//		Preference startTimePref = new Preference(PreferenceType.START_TIME, "202020");
+//		Preference startDatePref = new Preference(PreferenceType.START_DATE, "2017-03-17");
+//		Preference endDatePref = new Preference(PreferenceType.END_DATE, "2017-03-20");
+//		Preference repeatPref = new Preference(PreferenceType.REPEAT, Repeat.WEEKDAY.toString());
+//		Preference genderPref = new Preference(PreferenceType.GENDER, Gender.M.toString());
+//		Preference agePref = new Preference(PreferenceType.AGE_RANGE, "20-30");
+//
+//		preferences.add(startTimePref);
+//		preferences.add(startDatePref);
+//		preferences.add(endDatePref);
+//		preferences.add(repeatPref);
+//		preferences.add(genderPref);
+//		preferences.add(agePref);
+//
+//		List<TripStop> tripStops = new ArrayList<>();
+//		TripStop startPos = new TripStop(1,new Point(53.2711963, -6.2045213)); // Central Park
+//		TripStop endPos = new TripStop(1,new Point(53.3437967, -6.2567603)); // Trinity
+//
+//		tripStops.add(startPos);
+//		tripStops.add(endPos);
+//
+//		tripDto.setPreferences(preferences);
+//		tripDto.setTimestamp(sdf.format(new Date()));
+//		tripDto.setTripType(TripType.SCHEDULED);
+//		tripDto.setTripStops(tripStops);
+//
+//		// Actual
+//		Trip actual = tripService.createTrip(loginId, tripDto);
+//
+//	}
 }
