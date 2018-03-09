@@ -82,12 +82,12 @@ public class TripServiceTest {
 		MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
 		
 		List<Preference> preferences = new ArrayList<>();
-		Preference startTimePref = new Preference(PreferenceType.START_TIME, "20:20:20");
-		Preference startDatePref = new Preference(PreferenceType.START_DATE, "2017-03-17");
-		Preference endDatePref = new Preference(PreferenceType.END_DATE, "2017-03-20");
-		Preference repeatPref = new Preference(PreferenceType.REPEAT, Repeat.WEEKDAY.toString());
-		Preference genderPref = new Preference(PreferenceType.GENDER, Gender.M.toString());
-		Preference agePref = new Preference(PreferenceType.AGE_RANGE, "20-30");
+		Preference startTimePref = new Preference<String>(PreferenceType.START_TIME, "20:20:20");
+		Preference startDatePref = new Preference<String>(PreferenceType.START_DATE, "2017-03-17");
+		Preference endDatePref = new Preference<String>(PreferenceType.END_DATE, "2017-03-20");
+		Preference repeatPref = new Preference<String>(PreferenceType.REPEAT, Repeat.WEEKDAY.toString());
+		Preference genderPref = new Preference<String>(PreferenceType.GENDER, Gender.M.toString());
+		Preference agePref = new Preference<String>(PreferenceType.AGE_RANGE, "20-30");
 		
 		preferences.add(startTimePref);
 		preferences.add(startDatePref);
@@ -113,7 +113,6 @@ public class TripServiceTest {
 		
 		// Assertions
 		assertThat(actual.getConversation()).isNotEqualTo(null);
-		assert
 				
 	}
 }

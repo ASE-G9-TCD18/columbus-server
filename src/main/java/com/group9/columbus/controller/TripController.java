@@ -1,7 +1,12 @@
 package com.group9.columbus.controller;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.group9.columbus.entity.Criteria;
+import com.group9.columbus.entity.Preference;
+import com.group9.columbus.enums.PreferenceType;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +43,7 @@ public class TripController {
 
 	/**
 	 * API to create a trip
-	 * 
-	 * @param loginId
+	 *
 	 * @param tripDto
 	 * @return
 	 */
@@ -79,9 +83,30 @@ public class TripController {
 	@RequestMapping(path = "/{tripId}/join", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> joinTripByTripId(@PathVariable("tripId") String tripId) {
 		String loginId = commonUtils.getLoggedInUserLoginId();
-		Trip trip = null;
-		
+		logger.info("Request for joining trip for tripid ("+tripId+") by "+loginId+") processed successfully.");
+		try {
+			tripService.requestJoinTrip(loginId, tripId);
+		}
+		catch(Exception ex){
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok("User: "+loginId+" successfully joined the trip: "+tripId);
 	}
+
+	@RequestMapping(path="/criteria", method=RequestMethod.GET, produces="application/json")
+	public ResponseEntity<List<Preference>> getCriteria(){
+		List<Preference> prefs= new ArrayList<>();
+		Preference<Integer> sizePref = new Preference<>(PreferenceType.GROUP_SIZE, 10);
+		prefs.add(sizePref);
+		return ResponseEntity.ok(prefs);
+	}
+
+//	@RequestMapping(path="/criteria", method=RequestMethod.POST, produces="application/json")
+//	public ResponseEntity<Criteria> getCriteria(@RequestBody Criteria criteria){
+//
+//		return ResponseEntity.ok(criteria);
+//
+//	}
 
 	@RequestMapping(path = "/temp", method = RequestMethod.GET, produces = "application/json")
 	public Point testGeo() {

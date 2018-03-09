@@ -17,7 +17,7 @@ public class Trip {
 	
 	@Indexed(unique = true)
 	private String tripId;
-	
+
 	private TripType tripType;
 	
 	private List<Preference> preferences;
