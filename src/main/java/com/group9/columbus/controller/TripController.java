@@ -109,17 +109,19 @@ public class TripController {
 	@RequestMapping(path="/criteria", method=RequestMethod.GET, produces="application/json")
 	public ResponseEntity<List<Preference>> getCriteria(){
 		List<Preference> prefs= new ArrayList<>();
-		Preference<Integer> sizePref = new Preference<>(PreferenceType.GROUP_SIZE, 10);
-		prefs.add(sizePref);
+		Preference<Integer> minSize = new Preference<>(PreferenceType.GROUP_MIN_SIZE, 0);
+		Preference<Integer> maxSize = new Preference<>(PreferenceType.GROUP_MIN_SIZE, 0);
+		prefs.add(minSize);
+		prefs.add(maxSize);
 		return ResponseEntity.ok(prefs);
 	}
 
-//	@RequestMapping(path="/criteria", method=RequestMethod.POST, produces="application/json")
-//	public ResponseEntity<Criteria> getCriteria(@RequestBody Criteria criteria){
-//
-//		return ResponseEntity.ok(criteria);
-//
-//	}
+	@RequestMapping(path="/search", method=RequestMethod.POST, produces="application/json")
+	public ResponseEntity<Criteria> getCriteria(@RequestBody Criteria criteria){
+
+		return ResponseEntity.ok(criteria);
+
+	}
 
 	@RequestMapping(path = "/temp", method = RequestMethod.GET, produces = "application/json")
 	public Point testGeo() {
