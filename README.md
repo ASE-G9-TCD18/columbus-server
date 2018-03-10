@@ -1,5 +1,13 @@
 # Columbus Server Application
 
+Columbus is trip collaboration application. Users with similar interests can search each other and set up trips to mutual
+destinations.
+
+Columbus allows two types of trips:
+
+* Scheduled Trips
+* Immediate Trips
+ 
 ## Running Development Server
 
 mvn spring-boot:run
