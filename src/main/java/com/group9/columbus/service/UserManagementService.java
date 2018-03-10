@@ -19,6 +19,9 @@ import com.group9.columbus.repository.UserRepository;
 
 import static java.util.Collections.emptyList;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Service class required by Spring Security for authentication.
  * 
@@ -110,9 +113,21 @@ public class UserManagementService implements UserDetailsService {
 
 	}
 
-	public ApplicationUser saveUser(ApplicationUser user) {
-		user = userRepository.save(user);
+	/**
+	 * Saves user to DB efficiently in one db call
+	 * @param users
+	 * @return
+	 */
+	public List<ApplicationUser> saveUser(ApplicationUser... users) {
+		
+		List<ApplicationUser> appUsersList = new ArrayList<>(users.length);
+
+		for(ApplicationUser user : users) {
+			appUsersList.add(user);
+		}
+	
+		appUsersList = userRepository.save(appUsersList);
 		logger.debug("User saved successfully to database.");
-		return user;
+		return appUsersList;
 	}
 }

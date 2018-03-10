@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.group9.columbus.dto.TripDto;
+import com.group9.columbus.dto.TripJoinRequestDto;
 import com.group9.columbus.entity.ApplicationUser;
 import com.group9.columbus.entity.Conversation;
 import com.group9.columbus.entity.Trip;
@@ -27,13 +28,16 @@ import static com.group9.columbus.enums.PreferenceType.GROUP_SIZE;
 public class TripService {
 
 	@Autowired
-	UserManagementService userMgmtService;
+	private UserManagementService userMgmtService;
 	
 	@Autowired
-	ConversationService convService;
+	private ConversationService convService;
 	
 	@Autowired
-	TripRepository tripRepo;
+	private TripRepository tripRepo;
+	
+	@Autowired
+	private NotificationService notifService;
 
 	Logger logger = Logger.getLogger(this.getClass());
 
@@ -83,7 +87,7 @@ public class TripService {
 			user.getTrips().add(trip);
 		}
 		
-		user = userMgmtService.saveUser(user);
+		userMgmtService.saveUser(user);
 		return trip;
 	}
 
@@ -115,11 +119,10 @@ public class TripService {
 		return trip;
 	}
 
-	/** This method returns the trip for the logged in user by tripId
+	/** This method returns the trip 
 	 * @param tripId trip id
-	 * @throws TripRequestedByUnAuthorizedUserException when trip isn't created by the user
 	 */
-	public Trip getTripById(String tripId) throws TripRequestedByUnAuthorizedUserException {
+	public Trip getTripById(String tripId) {
 		Trip trip = tripRepo.findByTripId(tripId);
 		return trip;
 	}
@@ -139,13 +142,55 @@ public class TripService {
 	 * @param loginId user login id
 	 * @param tripId  trip id
 	 */
-	public void requestJoinTrip(String loginId, String tripId){
-		/*
-		* Send notification to specific
-		*/
-
+	@Transactional
+	public void requestJoinTrip(String loginId, String tripId) {
+		
+		Trip trip = getTripById(tripId);
+		ApplicationUser requestFrom = userMgmtService.findUserByUsername(loginId);
+		ApplicationUser requestTo = userMgmtService.findUserByUsername(trip.getAdmin()); 
+		
+		// TODO: Checks for group capacity
+		
+		// mocking a notification
+		
+		if (notifService.sendNewJoinRequestNotification(requestTo.getDeviceId(), requestFrom.getLoginId())) {
+			logger.info("Notification to join trip by ("+requestFrom.getLoginId()+") sent to ("+requestTo.getLoginId()+").");
+			
+			// Add this trip to the list of trips whose join request is pending
+			setTripJoinReqForJoinee(requestFrom, trip);
+			
+			// Add this request to list of requests in the admin
+			TripJoinRequestDto tripJoinRequestDto = 
+					new TripJoinRequestDto(requestFrom.getLoginId(), requestTo.getLoginId(), trip);
+			setTripJoinReqForAdmin(requestTo, tripJoinRequestDto);
+			
+			
+			// TODO discuss whether join request is a trip specific thing or user specific
+			// Save the user
+			userMgmtService.saveUser(requestFrom, requestTo);
+		} 
 	}
 
+	
+	private ApplicationUser setTripJoinReqForAdmin(ApplicationUser admin, TripJoinRequestDto tripJoinRequestDto) {
+		List<TripJoinRequestDto> pendingRequests = admin.getTripsRequestsAwaitingConfirmation();
+		if(pendingRequests == null) {
+			pendingRequests = new ArrayList<>();
+		}
+		pendingRequests.add(tripJoinRequestDto);
+		admin.setTripsRequestsAwaitingConfirmation(pendingRequests);
+		return admin;
+	}
+	
+	private ApplicationUser setTripJoinReqForJoinee(ApplicationUser joinee, Trip trip) {
+		List<Trip> tripJoinRequest = joinee.getTripsRequestsMade();
+		if(tripJoinRequest == null) {
+			tripJoinRequest = new ArrayList<>();
+		}
+		tripJoinRequest.add(trip);
+		joinee.setTripsRequestsMade(tripJoinRequest);
+		return joinee;
+	}
 	/**
 	 * User Joins into a trip or approved by the group admin
 	 * @param loginId user login id

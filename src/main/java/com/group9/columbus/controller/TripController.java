@@ -90,15 +90,19 @@ public class TripController {
 	public ResponseEntity<String> joinTripByTripId(@PathVariable("tripId") String tripId) {
 		String loginId = commonUtils.getLoggedInUserLoginId();
 
-		logger.info("Request for joining trip for tripid ("+tripId+") by "+loginId+") processed successfully.");
+		logger.info("Request received to join trip ("+tripId+") by ("+loginId+").");
 		try {
 			tripService.requestJoinTrip(loginId, tripId);
+			logger.info("Request to join ("+tripId+") by ("+loginId+") processed successfully.");
 		}
 		catch(Exception ex){
-			return ResponseEntity.notFound().build();
+			logger.error(ex);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(CommonUtils.createErrorResponseMessage(ex.getMessage()));
 		}
-		return ResponseEntity.ok("User: "+loginId+" successfully joined the trip: "+tripId);
-
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(CommonUtils.createResponseMessage("User: "+loginId+" successfully joined the trip: "+tripId));
 	}
 
 

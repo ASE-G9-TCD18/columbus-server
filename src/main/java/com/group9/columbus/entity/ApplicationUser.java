@@ -3,7 +3,6 @@ package com.group9.columbus.entity;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -11,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.group9.columbus.dto.TripJoinRequestDto;
 import com.group9.columbus.dto.UserDto;
 
 @Document(collection = "user")
@@ -22,7 +22,6 @@ public class ApplicationUser {
 	@NotNull(message = "Login Id cannot be left null.")
 	@Indexed(unique = true)
 	private String loginId;
-	
 
 	@NotNull(message="Password cannot be left null.")
 	private String password;
@@ -50,6 +49,12 @@ public class ApplicationUser {
 	
 	@DBRef(lazy = true)
 	private List<Trip> trips;
+	
+	@DBRef(lazy = true)
+	private List<Trip> tripsRequestsMade;
+	
+	@DBRef(lazy = true)
+	private List<TripJoinRequestDto> tripsRequestsAwaitingConfirmation;
 
 	public String getId() {
 		return id;
@@ -141,6 +146,22 @@ public class ApplicationUser {
 		this.trips = trips;
 	}
 
+	public List<Trip> getTripsRequestsMade() {
+		return tripsRequestsMade;
+	}
+
+	public void setTripsRequestsMade(List<Trip> tripsRequestsMade) {
+		this.tripsRequestsMade = tripsRequestsMade;
+	}
+
+	public List<TripJoinRequestDto> getTripsRequestsAwaitingConfirmation() {
+		return tripsRequestsAwaitingConfirmation;
+	}
+
+	public void setTripsRequestsAwaitingConfirmation(List<TripJoinRequestDto> tripsRequestsAwaitingConfirmation) {
+		this.tripsRequestsAwaitingConfirmation = tripsRequestsAwaitingConfirmation;
+	}
+
 	public ApplicationUser() {
 
 	}
@@ -177,6 +198,10 @@ public class ApplicationUser {
 		this.userRating = user.getUserRating();
 	}
 	
+	/**
+	 * Helper method to enable deep copy of non-sensitive {@link ApplicationUser} details.
+	 * @param user
+	 */
 	@JsonIgnore
 	public void setApplicationUserDetails(ApplicationUser user) {
 		this.firstName = user.getFirstName();
