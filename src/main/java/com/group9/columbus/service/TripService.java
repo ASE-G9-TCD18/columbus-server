@@ -151,18 +151,21 @@ public class TripService {
 		
 		// TODO: Checks for group capacity
 		
+		// TODO: Check if join request already sent
+		
+		
 		// mocking a notification
 		
 		if (notifService.sendNewJoinRequestNotification(requestTo.getDeviceId(), requestFrom.getLoginId())) {
 			logger.info("Notification to join trip by ("+requestFrom.getLoginId()+") sent to ("+requestTo.getLoginId()+").");
 			
 			// Add this trip to the list of trips whose join request is pending
-			setTripJoinReqForJoinee(requestFrom, trip);
+			requestFrom = setTripJoinReqForJoinee(requestFrom, trip);
 			
 			// Add this request to list of requests in the admin
 			TripJoinRequestDto tripJoinRequestDto = 
 					new TripJoinRequestDto(requestFrom.getLoginId(), requestTo.getLoginId(), trip);
-			setTripJoinReqForAdmin(requestTo, tripJoinRequestDto);
+			requestTo = setTripJoinReqForAdmin(requestTo, tripJoinRequestDto);
 			
 			
 			// TODO discuss whether join request is a trip specific thing or user specific
@@ -172,6 +175,13 @@ public class TripService {
 	}
 
 	
+	/**
+	 * 
+	 * Adds the trip join request in the list of pending requests of Admin.
+	 * @param Applicationuser admin
+	 * @param TripJoinRequestDto tripJoinRequest
+	 * @return Applicationuser admin
+	 */
 	private ApplicationUser setTripJoinReqForAdmin(ApplicationUser admin, TripJoinRequestDto tripJoinRequestDto) {
 		List<TripJoinRequestDto> pendingRequests = admin.getTripsRequestsAwaitingConfirmation();
 		if(pendingRequests == null) {
@@ -182,6 +192,12 @@ public class TripService {
 		return admin;
 	}
 	
+	/**
+	 * Add the trip join request in the list of request in the joinee.
+	 * @param ApplicationUser joinee
+	 * @param Trip trip
+	 * @return ApplicationUser joinee
+	 */
 	private ApplicationUser setTripJoinReqForJoinee(ApplicationUser joinee, Trip trip) {
 		List<Trip> tripJoinRequest = joinee.getTripsRequestsMade();
 		if(tripJoinRequest == null) {
@@ -235,4 +251,5 @@ public class TripService {
 	private boolean isFull(Trip trip) throws Exception {
 		return getTripCapacity(trip)< trip.getTripUsersLoginIds().size();
 	}
+	
 }

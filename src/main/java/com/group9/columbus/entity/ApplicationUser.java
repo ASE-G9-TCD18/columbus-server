@@ -53,7 +53,6 @@ public class ApplicationUser {
 	@DBRef(lazy = true)
 	private List<Trip> tripsRequestsMade;
 	
-	@DBRef(lazy = true)
 	private List<TripJoinRequestDto> tripsRequestsAwaitingConfirmation;
 
 	public String getId() {

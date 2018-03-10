@@ -27,9 +27,11 @@ public class FcmThread extends Thread {
 	private Logger logger = Logger.getLogger(FcmThread.class);
 	private String fcmMessage;
 
-	
 	public FcmThread() {
-		
+	}
+	
+	public FcmThread(String fcmMessage) {
+		this.fcmMessage = fcmMessage;
 	}
 	
 	public String getFcmMessage() {
