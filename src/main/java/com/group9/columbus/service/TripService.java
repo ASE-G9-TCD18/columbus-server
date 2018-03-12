@@ -22,7 +22,7 @@ import com.group9.columbus.exception.IncorrectValueFormat;
 import com.group9.columbus.exception.TripRequestedByUnAuthorizedUserException;
 import com.group9.columbus.repository.TripRepository;
 
-import static com.group9.columbus.enums.PreferenceType.GROUP_SIZE;
+import static com.group9.columbus.enums.PreferenceType.GROUP_MAX_SIZE;
 
 @Service
 public class TripService {
@@ -41,8 +41,8 @@ public class TripService {
 
 	Logger logger = Logger.getLogger(this.getClass());
 
-//	@Autowired
-//	TripValidatorService tripValidatorService;
+	@Autowired
+	TripValidatorService tripValidatorService;
 	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
 
@@ -58,8 +58,8 @@ public class TripService {
 		Conversation conversation = convService.createConversation();
 		ApplicationUser user = userMgmtService.findUserByUsername(loginId);
 
-//		// Validate TripDto
-//		tripValidatorService.validateTripCreationDetails(tripDto);
+		// Validate TripDto
+		tripValidatorService.validateTripCreationDetails(tripDto);
 
 		
 		List<String> appUsers = new ArrayList<>();
@@ -217,7 +217,7 @@ public class TripService {
 	 * @param tripId  trip id
 	 * @return TripId
 	 */
-	public void joinTrip(String loginId, String tripId) throws Exception {
+	public void joinTrip(String loginId, String tripId) throws TripManagementException {
 		Trip trip = tripRepo.findByTripId(tripId);
 		if(trip==null) {
 			throw new TripManagementException("Trip doesn't exist with id: " + tripId);
@@ -228,7 +228,7 @@ public class TripService {
 			tripRepo.save(trip);
 		}
 		else{
-			throw new Exception("Full Trip!!!!");
+			throw new TripManagementException("Trip "+tripId+" is full.");
 		}
 	}
 	
@@ -243,17 +243,23 @@ public class TripService {
 		return tripId;
 	}
 
-	private Integer getTripCapacity(Trip trip) throws Exception {
+	private Integer getTripCapacity(Trip trip){
 		for(Preference pref : trip.getPreferences()){
-			if(pref.getPreferenceType()==GROUP_SIZE){
+			if(pref.getPreferenceType()==GROUP_MAX_SIZE){
 				return (Integer)pref.getValue();
 			}
 		}
-		throw new Exception("No Preference as "+GROUP_SIZE+" found in trip");
+		throw new RuntimeException("No Preference as "+GROUP_MAX_SIZE+" found in trip");
 	}
 
-	private boolean isFull(Trip trip) throws Exception {
-		return getTripCapacity(trip)< trip.getTripUsersLoginIds().size();
+	/**
+	 * Check if trip is full or not.
+	 * @param trip trip instance
+	 * @return full or not
+	 * @throws Exception
+	 */
+	private boolean isFull(Trip trip) {
+		return getTripCapacity(trip)< trip.getTripUsersLoginIds().size()+1;
 	}
 	
 }
