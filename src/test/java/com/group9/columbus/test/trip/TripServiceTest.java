@@ -125,6 +125,7 @@ public class TripServiceTest {
 //		Preference endDatePref = new Preference(PreferenceType.END_DATE, "2017-03-20");
 //		Preference repeatPref = new Preference(PreferenceType.REPEAT, Repeat.WEEKDAY.toString());
 //		Preference genderPref = new Preference(PreferenceType.GENDER, Gender.M.toString());
+//		Preference groupSizePref = new Preference(PreferenceType.GROUP_SIZE, "5-10");
 //		Preference agePref = new Preference(PreferenceType.AGE_RANGE, "20-30");
 //
 //		preferences.add(startTimePref);

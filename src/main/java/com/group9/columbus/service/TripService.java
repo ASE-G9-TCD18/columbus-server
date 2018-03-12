@@ -141,9 +141,10 @@ public class TripService {
 	 * User tried to request joining a daily trip.
 	 * @param loginId user login id
 	 * @param tripId  trip id
+	 * @throws TripManagementException 
 	 */
 	@Transactional
-	public void requestJoinTrip(String loginId, String tripId) {
+	public void requestJoinTrip(String loginId, String tripId) throws TripManagementException {
 		
 		Trip trip = getTripById(tripId);
 		ApplicationUser requestFrom = userMgmtService.findUserByUsername(loginId);
@@ -154,8 +155,8 @@ public class TripService {
 		// TODO: Check if join request already sent
 		
 		
-		// mocking a notification
-		
+		// If join request notification send successfully to admin then
+		// persist to database
 		if (notifService.sendNewJoinRequestNotification(requestTo.getDeviceId(), requestFrom.getLoginId())) {
 			logger.info("Notification to join trip by ("+requestFrom.getLoginId()+") sent to ("+requestTo.getLoginId()+").");
 			
@@ -171,7 +172,10 @@ public class TripService {
 			// TODO discuss whether join request is a trip specific thing or user specific
 			// Save the user
 			userMgmtService.saveUser(requestFrom, requestTo);
-		} 
+		} else {
+			logger.error("Unable to send notification. Check error log of NotificationService.");
+			throw new TripManagementException("Unable to complete request. Please try again later.");
+		}
 	}
 
 	
