@@ -2,9 +2,11 @@ package com.group9.columbus.controller;
 
 import java.util.List;
 
+import com.group9.columbus.exception.TripManagementException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,4 +47,13 @@ public class TripsController {
 		
 		return JsonUtils.getJsonForResponse(trips);
 	}
+
+	@RequestMapping(path = "/all", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<String> getSuperAllTrips() {
+		List<Trip> trips = tripService.getAllTrips();
+		logger.info("Request for all trips for all users");
+
+		return JsonUtils.getJsonForResponse(trips);
+	}
 }
+

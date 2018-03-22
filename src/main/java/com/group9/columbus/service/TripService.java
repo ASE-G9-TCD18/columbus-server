@@ -138,6 +138,15 @@ public class TripService {
 	}
 
 	/**
+	 * This method return all the trips for all users.
+	 * @return all the trips.
+	 */
+	public List<Trip> getAllTrips() {
+		List<Trip> trips = tripRepo.findByTripType("SCHEDULED");
+		logger.warn("TRIPS:" + trips);
+		return trips;
+	}
+	/**
 	 * User tried to request joining a daily trip.
 	 * @param loginId user login id
 	 * @param tripId  trip id
