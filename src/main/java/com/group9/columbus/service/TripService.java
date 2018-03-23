@@ -75,7 +75,7 @@ public class TripService {
 		ApplicationUser user = userMgmtService.findUserByUsername(loginId);
 
 		// Validate TripDto
-		tripValidatorService.validateTripCreationDetails(tripDto);
+		//tripValidatorService.validateTripCreationDetails(tripDto);
 
 		List<String> appUsers = new ArrayList<>();
 		appUsers.add(user.getLoginId());
@@ -213,29 +213,64 @@ public class TripService {
 			throw new TripManagementException("Unable to complete request. Please try again later.");
 		}
 	}
+	
+	/**
+	 * Accepts trip join request
+	 * @param loginId
+	 * @param tripId
+	 * @throws TripRequestedByUnAuthorizedUserException 
+	 */
+	@Transactional
+	public void acceptJoinTrip(String adminLoginId, TripJoinRequestDto tripJoinRequest) 
+			throws TripRequestedByUnAuthorizedUserException {
+		
+		if(!adminLoginId.equals(tripJoinRequest.getTrip().getAdmin())) {
+			throw new TripRequestedByUnAuthorizedUserException("You do not have sufficient permissions to "
+					+ "accept this request");
+		}
+		
+		Trip trip = tripRepo.findByTripId(tripJoinRequest.getTrip().getTripId());
+		// Add the user to the Trip
+		trip.getTripUsersLoginIds().add(tripJoinRequest.getRequestFrom());
+		trip = tripRepo.save(trip);
+		
+		
+		// update the joinee info about the trip
+		ApplicationUser user = userMgmtService.findUserByUsername(tripJoinRequest.getRequestFrom());
+		// add the trip
+		if(user.getTrips() == null) {
+			user.setTrips(new ArrayList<Trip>());
+		}
+		user.getTrips().add(trip);
+		
+		// remove trip request 
+		for (Trip reqTrip : user.getTripsRequestsMade()) {
+			if(reqTrip.getTripId().equals(trip.getTripId())) {
+				user.getTripsRequestsMade().remove(reqTrip);
+				break;
+			}
+		}
+		userMgmtService.saveUser(user);
+		
+		
+		// remove the request from admin
+		ApplicationUser admin = userMgmtService.findUserByUsername(adminLoginId);
+		
+		for (TripJoinRequestDto joinReqDto : admin.getTripsRequestsAwaitingConfirmation()) {
+			if(joinReqDto.getTrip().getTripId().equals(tripJoinRequest.getTrip().getTripId())) {
+				admin.getTripsRequestsAwaitingConfirmation().remove(joinReqDto);
+				break;
+			}
+			
+		}
+		userMgmtService.saveUser(admin);
+	}
 
 	// TODO: Optimize this later to get limited details only
 	public List<Trip> getTripsNearToDestination(TripStop dest, TravelMode travelMode) {
 
 		List<Trip> alltrips = tripRepo.findAllTrips();
-		/*LatLng[] destinations = new LatLng[alltrips.size()];
-
-		if (alltrips.size() > 0) {
-
-			// Get all trip starting locations
-			int i = 0;
-			for (Trip trip : alltrips) {
-				destinations[i] = trip.getTripStops().get(1).getCoordinate();
-				i++;
-			}
-			DistanceMatrix dm = gpsService.getDistance(travelMode, dest.getCoordinate(), destinations);
-
-		}
-		*/
-		// Fetch trips that match preferences and then sort them according to nearest
-		// first using google maps
-		
-		List<TripAndDistanceDto> distanceList = new ArrayList();
+		List<TripAndDistanceDto> distanceList = new ArrayList<>();
 		
 		for (Trip trip : alltrips ) {
 			LatLng tripDest = trip.getTripStops().get(1).getCoordinate();
@@ -350,6 +385,8 @@ public class TripService {
 	
 	private List<Trip> getTopKTrip(int k, List<TripAndDistanceDto> tripAndDistanceDtos) {
 		List<Trip> trips = new ArrayList<>();
+		if(k > tripAndDistanceDtos.size())
+			k = tripAndDistanceDtos.size();
 		
 		for(int i = 0; i < k; i++) {
 			trips.add(tripAndDistanceDtos.get(i).getTrip());

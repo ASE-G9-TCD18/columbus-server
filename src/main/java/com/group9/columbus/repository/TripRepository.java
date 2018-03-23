@@ -13,7 +13,8 @@ public interface TripRepository extends MongoRepository<Trip, String> {
 	
 	public Trip findByTripId(String tripId);
 
-	@Query(value = "{}", fields="{ 'id' : 1, 'tripStops' : 1, 'tripId' : 1}")
+//	@Query(value = "{}", fields="{ 'id' : 1, 'tripStops' : 1, 'tripId' : 1, }")
+	@Query(value = "{}", fields="{ }")
 	public List<Trip> findAllTrips();
 
 	public List<Trip> findByTripType(String tripType);

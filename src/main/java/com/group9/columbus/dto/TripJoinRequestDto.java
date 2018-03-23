@@ -16,6 +16,8 @@ public class TripJoinRequestDto {
 	
 	@DBRef(lazy=true)
 	private Trip trip;
+
+	public TripJoinRequestDto() { }
 	
 	public TripJoinRequestDto(String requestFrom, String requestTo, Trip trip) {
 		super();

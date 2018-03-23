@@ -2,6 +2,7 @@ package com.group9.columbus.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
+import com.group9.columbus.comparator.TripScoreComparator;
 import com.group9.columbus.dto.TripDto;
 import com.group9.columbus.dto.TripScoreDto;
 import com.group9.columbus.entity.Preference;
@@ -30,7 +32,8 @@ public class SearchService {
 	private TripService tripService;
 
 	public List<Trip> searchTrips(String loginId, TripDto requestedTrip) {
-		// TODO:
+		
+		List<TripScoreDto> tripWithScoreList = new ArrayList<TripScoreDto>();
 		TripStop source = requestedTrip.getTripStops().get(0);
 		TripStop dest = requestedTrip.getTripStops().get(1);
 
@@ -44,7 +47,7 @@ public class SearchService {
 
 			// Iterate over preferences of requested trip and match with preferences of the
 			// found trip
-			for (Preference prefOfReqTrip : requestedTrip.getPreferences()) {
+			for (Preference<String> prefOfReqTrip : requestedTrip.getPreferences()) {
 
 				// If Gender Preference requested
 				if (prefOfReqTrip.getPreferenceType().equals(PreferenceType.GENDER)) {
@@ -65,18 +68,30 @@ public class SearchService {
 					
 					long diff = differenceBtwnTwoDates((String)prefOfReqTrip.getValue(), prefValueForFoundTrip);
 					
+					score += (24-diff)/24;
 				}
 			}
-
+			
+			
+			TripScoreDto tripWithScore = new TripScoreDto(trip, score);
+			tripWithScoreList.add(tripWithScore);
 		}
-
+		
+		
+		tripWithScoreList.sort(new TripScoreComparator());
+		trips = new ArrayList<>();
+		for (TripScoreDto tripWithScore : tripWithScoreList) {
+			trips.add(tripWithScore.getTrip());
+		}
 		return trips;
 	}
 
 	private String getPreferenceForPreferenceType(TripDto obj, PreferenceType type) {
 		//TODO:
 		for (Preference pref : obj.getPreferences()) {
-
+			if (pref.getPreferenceType().equals(type)) {
+				return (String)pref.getValue();
+			}
 		}
 		
 		return null;
@@ -93,9 +108,9 @@ public class SearchService {
 
 		// Comparing dates
 		long difference = Math.abs(date1.getTime() - date2.getTime());
-		long differenceDates = difference / (60 * 60 * 1000);
+		long differenceHours = difference / (60 * 60 );
 
-		return differenceDates;
+		return differenceHours;
 		} catch (ParseException e) {
 			logger.error(e);
 			return -1;

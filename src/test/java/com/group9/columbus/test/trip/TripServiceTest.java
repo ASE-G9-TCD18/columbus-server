@@ -80,14 +80,12 @@ public class TripServiceTest {
 		logger.info("Running create trip test");
 		
 		List<Preference> preferences = new ArrayList<>();
-		Preference startTimePref = new Preference<>(PreferenceType.START_TIME, "20:20:20");
-		Preference startDatePref = new Preference<>(PreferenceType.START_DATE, "2017-03-17");
-		Preference endDatePref = new Preference<>(PreferenceType.END_DATE, "2017-03-20");
+		Preference startDatePref = new Preference<>(PreferenceType.START_DATE, "2017-03-17_20:20:20");
+		Preference endDatePref = new Preference<>(PreferenceType.END_DATE, "2017-03-20_20:20:20");
 		Preference repeatPref = new Preference<>(PreferenceType.REPEAT, Repeat.WEEKDAY.toString());
 		Preference genderPref = new Preference<>(PreferenceType.GENDER, Gender.M.toString());
 		Preference agePref = new Preference<>(PreferenceType.AGE_RANGE, "20-30");
 		
-		preferences.add(startTimePref);
 		preferences.add(startDatePref);
 		preferences.add(endDatePref);
 		preferences.add(repeatPref);
@@ -121,15 +119,13 @@ public class TripServiceTest {
 	public void createTripFailure() throws IncorrectValueFormat {
 		logger.info("Running create trip test for failure");
 		List<Preference> preferences = new ArrayList<>();
-		Preference<String> startTimePref = new Preference<>(PreferenceType.START_TIME, "202020");
-		Preference startDatePref = new Preference<>(PreferenceType.START_DATE, "2017-03-17");
+		Preference startDatePref = new Preference<>(PreferenceType.START_DATE, "2017-03-17_202020");
 		Preference endDatePref = new Preference<>(PreferenceType.END_DATE, "2017-03-20");
 		Preference repeatPref = new Preference<>(PreferenceType.REPEAT, Repeat.WEEKDAY.toString());
 		Preference genderPref = new Preference<>(PreferenceType.GENDER, Gender.M.toString());
 		Preference agePref = new Preference<>(PreferenceType.AGE_RANGE, "20-30");
 		// TODO: Group size pref
 
-		preferences.add(startTimePref);
 		preferences.add(startDatePref);
 		preferences.add(endDatePref);
 		preferences.add(repeatPref);

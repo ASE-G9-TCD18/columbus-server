@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.group9.columbus.dto.TripDto;
+import com.group9.columbus.dto.TripJoinRequestDto;
 import com.group9.columbus.entity.Trip;
 import com.group9.columbus.exception.IncorrectValueFormat;
 import com.group9.columbus.exception.TripManagementException;
@@ -105,6 +106,26 @@ public class TripController {
 				.body(CommonUtils.createResponseMessage("User: "+loginId+" successfully joined the trip: "+tripId));
 	}
 
+	@RequestMapping(path = "/{tripId}/accept", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<String> acceptTripJoinRequest(@PathVariable("tripId") String tripId, 
+			@RequestBody TripJoinRequestDto tripJoinRequest) {
+		String loginId = commonUtils.getLoggedInUserLoginId();
+
+		logger.info("Request received to accept join trip ("+tripId+") by ("+loginId+").");
+		try {
+			tripService.acceptJoinTrip(loginId, tripJoinRequest);
+			logger.info("Request to accept join trip ("+tripId+") by ("+loginId+") processed successfully.");
+		}
+		catch(Exception ex){
+			logger.error(ex);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(CommonUtils.createErrorResponseMessage(ex.getMessage()));
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(CommonUtils.createResponseMessage("Accepted join request for trip: "+tripId+" by "
+		+tripJoinRequest.getRequestFrom()));
+	}
 
 	@RequestMapping(path="/criteria", method=RequestMethod.GET, produces="application/json")
 	public ResponseEntity<List<Preference>> getCriteria(){
