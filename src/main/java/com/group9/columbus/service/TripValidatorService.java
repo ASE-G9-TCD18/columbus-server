@@ -20,12 +20,14 @@ public class TripValidatorService {
 				if (!prefVal.matches("([0-9]{4})-([0-9]{2})-([0-9]{2})"))
 					throw new IncorrectValueFormat("Incorrect date format. Should match yyyy-MM-dd");
 
-			} else if (PreferenceType.START_TIME.equals(preference.getPreferenceType())) {
-                String prefVal = (String)preference.getValue();
-				if (!prefVal.matches("([0-9]{2}):([0-9]{2}):([0-9]{2})"))
-					throw new IncorrectValueFormat("Incorrect date format. Should match HH:mm:ss");
-
-			} else if (PreferenceType.AGE_RANGE.equals(preference.getPreferenceType())) {
+		} 
+//				else if (PreferenceType.START_TIME.equals(preference.getPreferenceType())) {
+//                String prefVal = (String)preference.getValue();
+//				if (!prefVal.matches("([0-9]{2}):([0-9]{2}):([0-9]{2})"))
+//					throw new IncorrectValueFormat("Incorrect date format. Should match HH:mm:ss");
+//
+//			} 
+				else if (PreferenceType.AGE_RANGE.equals(preference.getPreferenceType())) {
                 String prefVal = (String)preference.getValue();
 				if (!prefVal.matches("[0-9]*-[0-9]*"))
 					throw new IncorrectValueFormat("Incorrect date format. Should match one of the formats "

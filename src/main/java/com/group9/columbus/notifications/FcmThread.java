@@ -20,24 +20,24 @@ import com.group9.columbus.config.ExternalConfig;
 @Scope("prototype")
 @Component
 public class FcmThread extends Thread {
-	
+
 	@Autowired
 	private ExternalConfig externalConfig;
-	
+
 	private Logger logger = Logger.getLogger(FcmThread.class);
 	private String fcmMessage;
 
 	public FcmThread() {
 	}
-	
+
 	public FcmThread(String fcmMessage) {
 		this.fcmMessage = fcmMessage;
 	}
-	
+
 	public String getFcmMessage() {
 		return fcmMessage;
 	}
-	
+
 	public void setFcmMessage(String fcmMessage) {
 		this.fcmMessage = fcmMessage;
 	}
@@ -77,6 +77,6 @@ public class FcmThread extends Thread {
 			logger.info("FCM message sent");
 		}
 	}
-	
+
 }
 

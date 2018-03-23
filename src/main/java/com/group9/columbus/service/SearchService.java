@@ -30,7 +30,7 @@ public class SearchService {
 	private TripService tripService;
 
 	public List<Trip> searchTrips(String loginId, TripDto requestedTrip) {
-
+		// TODO:
 		TripStop source = requestedTrip.getTripStops().get(0);
 		TripStop dest = requestedTrip.getTripStops().get(1);
 
@@ -74,10 +74,12 @@ public class SearchService {
 	}
 
 	private String getPreferenceForPreferenceType(TripDto obj, PreferenceType type) {
-
+		//TODO:
 		for (Preference pref : obj.getPreferences()) {
 
 		}
+		
+		return null;
 	}
 
 	private long differenceBtwnTwoDates(String d1, String d2) {
