@@ -18,6 +18,7 @@ import org.springframework.data.geo.Point;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.google.maps.model.LatLng;
 import com.group9.columbus.dto.TripDto;
 import com.group9.columbus.entity.ApplicationUser;
 import com.group9.columbus.entity.Preference;
@@ -94,8 +95,8 @@ public class TripServiceTest {
 		preferences.add(agePref);
 		
 		List<TripStop> tripStops = new ArrayList<>();
-		TripStop startPos = new TripStop(1,new Point(53.2711963, -6.2045213)); // Central Park 
-		TripStop endPos = new TripStop(1,new Point(53.3437967, -6.2567603)); // Trinity
+		TripStop startPos = new TripStop(1,new LatLng(53.2711963, -6.2045213)); // Central Park 
+		TripStop endPos = new TripStop(1,new LatLng(53.3437967, -6.2567603)); // Trinity
 
 		tripStops.add(startPos);
 		tripStops.add(endPos);
@@ -136,8 +137,8 @@ public class TripServiceTest {
 		preferences.add(agePref);
 
 		List<TripStop> tripStops = new ArrayList<>();
-		TripStop startPos = new TripStop(1,new Point(53.2711963, -6.2045213)); // Central Park
-		TripStop endPos = new TripStop(1,new Point(53.3437967, -6.2567603)); // Trinity
+		TripStop startPos = new TripStop(1,new LatLng(53.2711963, -6.2045213)); // Central Park
+		TripStop endPos = new TripStop(1,new LatLng(53.3437967, -6.2567603)); // Trinity
 
 		tripStops.add(startPos);
 		tripStops.add(endPos);

@@ -1,17 +1,18 @@
 package com.group9.columbus.entity;
 
-import org.springframework.data.geo.Point;
+
+import com.google.maps.model.LatLng;
 
 public class TripStop {
 	
 	private int sequenceNumber;
 	
-	private Point coordinate;
+	private LatLng coordinate;
 
 	public TripStop() {
 	}
 	
-	public TripStop(int sequenceNumber, Point coordinate) {
+	public TripStop(int sequenceNumber, LatLng coordinate) {
 		super();
 		this.sequenceNumber = sequenceNumber;
 		this.coordinate = coordinate;
@@ -25,11 +26,11 @@ public class TripStop {
 		this.sequenceNumber = sequenceNumber;
 	}
 
-	public Point getCoordinate() {
+	public LatLng getCoordinate() {
 		return coordinate;
 	}
 
-	public void setCoordinate(Point coordinate) {
+	public void setCoordinate(LatLng coordinate) {
 		this.coordinate = coordinate;
 	}
 

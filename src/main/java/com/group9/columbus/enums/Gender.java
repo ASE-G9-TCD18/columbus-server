@@ -1,5 +1,5 @@
 package com.group9.columbus.enums;
 
 public enum Gender {
-	M, F
+	M, F, NA
 }
