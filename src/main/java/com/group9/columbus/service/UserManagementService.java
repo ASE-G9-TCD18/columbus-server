@@ -67,16 +67,16 @@ public class UserManagementService implements UserDetailsService {
 		return user;
 	}
 	
-	public List<ApplicationUser> findUsersByUsernames(String[] loginIds) throws UsernameNotFoundException {
-		List<ApplicationUser> users = userRepository.findByLoginIds(loginIds);
-		if (users == null) {
-			throw new UsernameNotFoundException(loginIds.toString());
-		}
-		return users;
-	}
+//	public List<ApplicationUser> findUsersByUsernames(String[] loginIds) throws UsernameNotFoundException {
+//		List<ApplicationUser> users = userRepository.findByLoginIdIn(loginIds);
+//		if (users == null) {
+//			throw new UsernameNotFoundException(loginIds.toString());
+//		}
+//		return users;
+//	}
 	
 	public List<ApplicationUser> findUsersByUsernames(List<String> loginIds) throws UsernameNotFoundException {
-		List<ApplicationUser> users = userRepository.findByLoginIds(loginIds);
+		List<ApplicationUser> users = userRepository.findByLoginIdIn(loginIds);
 		if (users == null) {
 			throw new UsernameNotFoundException(loginIds.toString());
 		}

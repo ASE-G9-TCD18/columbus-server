@@ -12,8 +12,6 @@ public interface UserRepository extends MongoRepository<ApplicationUser, String>
 
 	public ApplicationUser findByLoginId(String loginId);
 	
-	public List<ApplicationUser> findByLoginIds(String[] loginIds);
-	
-	public List<ApplicationUser> findByLoginIds(List<String> loginIds);
+	public List<ApplicationUser> findByLoginIdIn(List<String> loginIds);
 	
 }
