@@ -66,6 +66,22 @@ public class UserManagementService implements UserDetailsService {
 		}
 		return user;
 	}
+	
+	public List<ApplicationUser> findUsersByUsernames(String[] loginIds) throws UsernameNotFoundException {
+		List<ApplicationUser> users = userRepository.findByLoginIds(loginIds);
+		if (users == null) {
+			throw new UsernameNotFoundException(loginIds.toString());
+		}
+		return users;
+	}
+	
+	public List<ApplicationUser> findUsersByUsernames(List<String> loginIds) throws UsernameNotFoundException {
+		List<ApplicationUser> users = userRepository.findByLoginIds(loginIds);
+		if (users == null) {
+			throw new UsernameNotFoundException(loginIds.toString());
+		}
+		return users;
+	}
 
 	public ApplicationUser saveNewUser(ApplicationUser user) throws UserExistsException {
 		// Check if user already present
@@ -129,5 +145,23 @@ public class UserManagementService implements UserDetailsService {
 		appUsersList = userRepository.save(appUsersList);
 		logger.debug("User saved successfully to database.");
 		return appUsersList;
+	}
+	
+	
+	/**
+	 * Update the rating of all users based on the tripRating
+	 * @param rating
+	 * @param users
+	 */
+	public void updateUserRating(Double rating, List<String> usersIds) {
+		List<ApplicationUser> users = findUsersByUsernames(usersIds);
+		for (ApplicationUser user : users) {
+			// Running mean
+			double runningMean = ((user.getTripsTillNow() * user.getUserRating()) + rating) 
+					/ user.getTripsTillNow() +1;
+			user.setUserRating(runningMean);
+		}
+		
+		userRepository.save(users);
 	}
 }

@@ -88,6 +88,7 @@ public class TripService {
 		trip.setAdmin(user.getLoginId());
 		trip.setTripUsersLoginIds(appUsers);
 		trip.setTripStops(tripDto.getTripStops());
+		trip.setTripRating(user.getUserRating());
 		trip.setConversation(conversation);
 
 		trip = tripRepo.save(trip);
@@ -229,14 +230,18 @@ public class TripService {
 					+ "accept this request");
 		}
 		
+		// update the joinee info about the trip
+		ApplicationUser user = userMgmtService.findUserByUsername(tripJoinRequest.getRequestFrom());
+		
+		// Some other logic...
 		Trip trip = tripRepo.findByTripId(tripJoinRequest.getTrip().getTripId());
 		// Add the user to the Trip
 		trip.getTripUsersLoginIds().add(tripJoinRequest.getRequestFrom());
+		trip.setTripRating(getRunningMean(trip.getTripUsersLoginIds().size(), 
+				trip.getTripRating(), user.getUserRating()));
 		trip = tripRepo.save(trip);
 		
 		
-		// update the joinee info about the trip
-		ApplicationUser user = userMgmtService.findUserByUsername(tripJoinRequest.getRequestFrom());
 		// add the trip
 		if(user.getTrips() == null) {
 			user.setTrips(new ArrayList<Trip>());
@@ -264,6 +269,10 @@ public class TripService {
 			
 		}
 		userMgmtService.saveUser(admin);
+		
+		// Update User Rating in accordance with Trip Rating
+		userMgmtService.updateUserRating(trip.getTripRating(), trip.getTripUsersLoginIds());
+		
 	}
 
 	// TODO: Optimize this later to get limited details only
@@ -395,4 +404,8 @@ public class TripService {
 		return trips;
 	}
 
+	private double getRunningMean(int n, double mean, double a) {
+		
+		return 0;
+	}
 }

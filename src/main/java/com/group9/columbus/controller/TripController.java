@@ -144,10 +144,4 @@ public class TripController {
 
 	}
 
-	@RequestMapping(path = "/temp", method = RequestMethod.GET, produces = "application/json")
-	public Point testGeo() {
-		Point pt = new Point();
-		pt.setLocation(45, 45);
-		return pt;
-	}
 }

@@ -54,6 +54,8 @@ public class ApplicationUser {
 	private List<Trip> tripsRequestsMade;
 	
 	private List<TripJoinRequestDto> tripsRequestsAwaitingConfirmation;
+	
+	private Double tripsTillNow;
 
 	public String getId() {
 		return id;
@@ -159,6 +161,14 @@ public class ApplicationUser {
 
 	public void setTripsRequestsAwaitingConfirmation(List<TripJoinRequestDto> tripsRequestsAwaitingConfirmation) {
 		this.tripsRequestsAwaitingConfirmation = tripsRequestsAwaitingConfirmation;
+	}
+
+	public Double getTripsTillNow() {
+		return tripsTillNow;
+	}
+
+	public void setTripsTillNow(Double tripsTillNow) {
+		this.tripsTillNow = tripsTillNow;
 	}
 
 	public ApplicationUser() {
