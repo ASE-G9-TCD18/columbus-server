@@ -55,5 +55,6 @@ public class TripsController {
 
 		return JsonUtils.getJsonForResponse(trips);
 	}
+	
 }
 

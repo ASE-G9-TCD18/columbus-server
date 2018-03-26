@@ -136,12 +136,22 @@ public class TripController {
 		prefs.add(maxSize);
 		return ResponseEntity.ok(prefs);
 	}
-
-	@RequestMapping(path="/search", method=RequestMethod.POST, produces="application/json")
-	public ResponseEntity<Criteria> getCriteria(@RequestBody Criteria criteria){
-
-		return ResponseEntity.ok(criteria);
-
+	
+	@RequestMapping(path = "/{tripId}", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<String> deleteTrip(@PathVariable("tripId") String tripId) {
+		String loginId = commonUtils.getLoggedInUserLoginId();
+		Trip trip = null;
+		
+		try {
+			trip = tripService.getTripById(loginId, tripId);
+			logger.info("Request for trip details for tripId ("+tripId+") by ("+loginId+") processed successfully.");
+			
+		} catch (TripManagementException tme) {
+			logger.error(tme);
+			CommonUtils.createErrorResponseMessage(tme.getMessage());
+		}
+		
+		return JsonUtils.getJsonForResponse(trip);
 	}
-
+	
 }

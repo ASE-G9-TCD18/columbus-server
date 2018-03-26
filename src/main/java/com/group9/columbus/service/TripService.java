@@ -358,6 +358,34 @@ public class TripService {
 			throw new TripManagementException("Trip " + tripId + " is full.");
 		}
 	}
+	
+	/**
+	 * Service method that deletes the trip if the logged in user is the trip owner.
+	 * @param loginId
+	 * @param tripId
+	 * @return
+	 * @throws TripRequestedByUnAuthorizedUserException 
+	 */
+	public boolean deleteTrip(String adminLoginId, String tripId) throws TripRequestedByUnAuthorizedUserException {
+
+		Trip trip = getTripById(tripId);
+		if(!adminLoginId.equals(trip.getAdmin())) {
+			throw new TripRequestedByUnAuthorizedUserException("You do not have sufficient permissions to "
+					+ "accept this request");
+		}
+		
+		// Delete the join requests made by all users
+		
+		// Delete the acceptance requests to the admin
+		
+		// Delete the trip in all users
+		List<String> tripUsers = trip.getTripUsersLoginIds();
+		for(String tripUser : tripUsers) {
+			
+		}
+		
+		// Delete the trip
+	}
 
 	/**
 	 * Generates a unique tripId which is a combination of yyMMdd + 4 random digits.
