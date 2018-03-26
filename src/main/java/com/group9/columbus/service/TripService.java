@@ -75,7 +75,7 @@ public class TripService {
 		ApplicationUser user = userMgmtService.findUserByUsername(loginId);
 
 		// Validate TripDto
-		//tripValidatorService.validateTripCreationDetails(tripDto);
+		tripValidatorService.validateTripCreationDetails(tripDto);
 
 		List<String> appUsers = new ArrayList<>();
 		appUsers.add(user.getLoginId());

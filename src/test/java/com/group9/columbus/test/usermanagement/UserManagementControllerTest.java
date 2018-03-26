@@ -78,7 +78,8 @@ public class UserManagementControllerTest {
 			String content = mockHttpOutputMessage.getBodyAsString();
 
 			// Test
-			given(userManagementService.editUser(loginId, user)).willReturn(user);
+			//given(userManagementService.editUser(loginId, user)).willReturn(user);
+			given(userRepo.findByLoginId(loginId)).willReturn(user);
 
 			MvcResult res = mvc.perform(put("/user/" + loginId).contentType(MediaType.APPLICATION_JSON).content(content)
 					.with(user(loginId).password(password))).andExpect(status().isOk()).andReturn();

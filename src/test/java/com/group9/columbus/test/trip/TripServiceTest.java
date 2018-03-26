@@ -144,8 +144,7 @@ public class TripServiceTest {
 		tripDto.setTripType(TripType.SCHEDULED);
 		tripDto.setTripStops(tripStops);
 
-		// Actual
 		Trip actual = tripService.createTrip(loginId, tripDto);
-
+		
 	}
 }

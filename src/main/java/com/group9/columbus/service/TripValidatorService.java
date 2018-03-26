@@ -17,7 +17,7 @@ public class TripValidatorService {
 					|| PreferenceType.END_DATE.equals(preference.getPreferenceType())) {
 
 			    String prefVal = (String)preference.getValue();
-				if (!prefVal.matches("([0-9]{4})-([0-9]{2})-([0-9]{2})"))
+				if (!prefVal.matches("([0-9]{4})-([0-9]{2})-([0-9]{2})_([0-9]{2}):([0-9]{2}):([0-9]{2})"))
 					throw new IncorrectValueFormat("Incorrect date format. Should match yyyy-MM-dd");
 
 		} 
