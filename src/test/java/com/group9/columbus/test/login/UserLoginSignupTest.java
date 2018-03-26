@@ -66,7 +66,7 @@ public class UserLoginSignupTest {
 	@Test
 	public void a_signUpTest() {
 
-		ApplicationUser user = new ApplicationUser(this.loginId, this.pwd, "Test", "User", "20", "test@test.id", "1234567890", 5.0, true);
+		ApplicationUser user = new ApplicationUser(this.loginId, this.pwd, "Test", "User", "20", "test@test.id", "1234567890", 5.0, true, null);
 		MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
 		try {
 			
@@ -86,7 +86,7 @@ public class UserLoginSignupTest {
 	@Test
 	public void b_signInTest() {
 
-		ApplicationUser user = new ApplicationUser(this.loginId, this.pwd, "Test", "User", "20", "test@test.id", "1234567890", 5.0, true);
+		ApplicationUser user = new ApplicationUser(this.loginId, this.pwd, "Test", "User", "20", "test@test.id", "1234567890", 5.0, true, null);
 		MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
 		try {
 		httpMsgConverter.write(user, MediaType.APPLICATION_JSON, mockHttpOutputMessage);

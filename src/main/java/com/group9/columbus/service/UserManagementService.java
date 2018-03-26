@@ -1,6 +1,8 @@
 package com.group9.columbus.service;
 
 import com.group9.columbus.entity.ApplicationUser;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +16,11 @@ import com.group9.columbus.exception.UserExistsException;
 import com.group9.columbus.exception.UserManagementException;
 import com.group9.columbus.repository.UserRepository;
 
+
 import static java.util.Collections.emptyList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Service class required by Spring Security for authentication.
@@ -24,6 +30,8 @@ import static java.util.Collections.emptyList;
 @Service
 public class UserManagementService implements UserDetailsService {
 
+	Logger logger = Logger.getLogger(UserManagementService.class);
+	
 	@Autowired
 	private UserRepository userRepository;
 
@@ -48,7 +56,7 @@ public class UserManagementService implements UserDetailsService {
 		}
 		return new org.springframework.security.core.userdetails.User(user.getLoginId(), user.getPassword(),
 				emptyList());
-		
+
 	}
 
 	public ApplicationUser findUserByUsername(String loginId) throws UsernameNotFoundException {
@@ -89,7 +97,7 @@ public class UserManagementService implements UserDetailsService {
 			throw new UsernameNotFoundException("User with loginId '" + user.getLoginId() + "' does not exist.");
 		}
 		
-		if(!user.getPassword().equals(user.getPassword())) {
+		if(!user.getPassword().equals(dbUser.getPassword())) {
 			throw new PasswordChangedException("DataMismatch: Not allowed to change password from here!");
 		}
 
@@ -103,5 +111,23 @@ public class UserManagementService implements UserDetailsService {
 
 		return dbUser;
 
+	}
+
+	/**
+	 * Saves user to DB efficiently in one db call
+	 * @param users
+	 * @return
+	 */
+	public List<ApplicationUser> saveUser(ApplicationUser... users) {
+		
+		List<ApplicationUser> appUsersList = new ArrayList<>(users.length);
+
+		for(ApplicationUser user : users) {
+			appUsersList.add(user);
+		}
+	
+		appUsersList = userRepository.save(appUsersList);
+		logger.debug("User saved successfully to database.");
+		return appUsersList;
 	}
 }

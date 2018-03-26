@@ -32,12 +32,12 @@ public class SignupController {
 		ApplicationUser userDto = null;
 		try {
 			 userDto = userMgmtSvc.saveNewUser(user);
+			 return JsonUtils.getJsonForResponse(userDto);
 		} catch (UserExistsException e) {
 			logger.error("User already exists.", e);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(CommonUtils.createErrorResponseMessage(e.getMessage()));
 		}
 		
-		return JsonUtils.getJsonForResponse(userDto);
 	}
 }

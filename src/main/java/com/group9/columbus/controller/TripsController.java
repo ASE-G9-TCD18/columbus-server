@@ -1,16 +1,20 @@
 package com.group9.columbus.controller;
 
+import java.util.List;
+
+import com.group9.columbus.exception.TripManagementException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group9.columbus.entity.ApplicationUser;
-import com.group9.columbus.repository.TripRepository;
+import com.group9.columbus.entity.Trip;
 import com.group9.columbus.repository.UserRepository;
+import com.group9.columbus.service.TripService;
+import com.group9.columbus.utils.CommonUtils;
 import com.group9.columbus.utils.JsonUtils;
 
 
@@ -19,11 +23,16 @@ import com.group9.columbus.utils.JsonUtils;
 @RequestMapping(value = "/trips")
 public class TripsController {
 
+	Logger logger = Logger.getLogger(TripsController.class);
+	
+	@Autowired
+	CommonUtils commonUtils;
+	
 	@Autowired
 	UserRepository userRepository;
 
 	@Autowired
-	TripRepository tripRepository;
+	TripService tripService;
 	
 	/**
 	 * Method returns all trips for this particular user
@@ -31,12 +40,20 @@ public class TripsController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAllTrips() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = (String)auth.getPrincipal();
+		String loginId = commonUtils.getLoggedInUserLoginId();
 		
-		// fetch user from database
-		ApplicationUser user = userRepository.findByLoginId(loginId);
+		List<Trip> trips = tripService.getTripsByLoginId(loginId);
+		logger.info("Request for all trips for user ("+loginId+") processed.");
 		
-		return JsonUtils.getJsonForResponse(tripRepository.findByTripUsersId(user.getId()));
+		return JsonUtils.getJsonForResponse(trips);
+	}
+
+	@RequestMapping(path = "/all", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<String> getSuperAllTrips() {
+		List<Trip> trips = tripService.getAllTrips();
+		logger.info("Request for all trips for all users");
+
+		return JsonUtils.getJsonForResponse(trips);
 	}
 }
+

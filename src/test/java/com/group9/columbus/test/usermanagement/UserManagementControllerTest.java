@@ -35,7 +35,7 @@ public class UserManagementControllerTest {
 	@Qualifier("mvc")
 	private MockMvc mvc;
 
-	@MockBean
+	@Autowired
 	private UserManagementService userManagementService;
 
 	@MockBean
