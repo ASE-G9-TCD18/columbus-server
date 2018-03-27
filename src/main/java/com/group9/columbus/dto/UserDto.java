@@ -1,6 +1,6 @@
 package com.group9.columbus.dto;
 
-import com.group9.columbus.entity.User;
+import com.group9.columbus.entity.ApplicationUser;
 
 /**
  * Helper class for returning User Objects to client.
@@ -17,22 +17,24 @@ public class UserDto {
 	
 	private String lastName;
 	
-	private Integer age;
+	private String age;
 	
 	private String emailId;
 	
 	private String contactNumber;
+	
+	private Double userRating;
 
-	public UserDto(User user) {
+	public UserDto(ApplicationUser user) {
 		this.id = user.getId();
 		this.loginId = user.getLoginId();;
 		this.firstName = user.getFirstName();
 		this.lastName = user.getLastName();
 		this.age = user.getAge();
 		this.emailId = user.getEmailId();
-		this.contactNumber = user.getEmailId();
+		this.contactNumber = user.getContactNumber();
+		this.userRating = user.getUserRating();
 	}
-
 	public String getId() {
 		return id;
 	}
@@ -65,11 +67,11 @@ public class UserDto {
 		this.lastName = lastName;
 	}
 
-	public Integer getAge() {
+	public String getAge() {
 		return age;
 	}
 
-	public void setAge(Integer age) {
+	public void setAge(String age) {
 		this.age = age;
 	}
 
@@ -87,6 +89,12 @@ public class UserDto {
 
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
+	}
+	public Double getUserRating() {
+		return userRating;
+	}
+	public void setUserRating(Double userRating) {
+		this.userRating = userRating;
 	}
 	
 }
