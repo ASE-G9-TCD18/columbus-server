@@ -140,18 +140,19 @@ public class TripController {
 	@RequestMapping(path = "/{tripId}", method = RequestMethod.DELETE, produces = "application/json")
 	public ResponseEntity<String> deleteTrip(@PathVariable("tripId") String tripId) {
 		String loginId = commonUtils.getLoggedInUserLoginId();
-		Trip trip = null;
 		
 		try {
-			trip = tripService.getTripById(loginId, tripId);
+			tripService.deleteTrip(loginId, tripId);
 			logger.info("Request for trip details for tripId ("+tripId+") by ("+loginId+") processed successfully.");
 			
 		} catch (TripManagementException tme) {
 			logger.error(tme);
-			CommonUtils.createErrorResponseMessage(tme.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(CommonUtils.createErrorResponseMessage(tme.getMessage()));
 		}
 		
-		return JsonUtils.getJsonForResponse(trip);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(CommonUtils.createResponseMessage("Trip: "+tripId+" deleted successfully."));
 	}
 	
 }

@@ -18,10 +18,10 @@ import com.group9.columbus.exception.UserExistsException;
 import com.group9.columbus.exception.UserManagementException;
 import com.group9.columbus.repository.UserRepository;
 
-
 import static java.util.Collections.emptyList;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -33,7 +33,7 @@ import java.util.List;
 public class UserManagementService implements UserDetailsService {
 
 	Logger logger = Logger.getLogger(UserManagementService.class);
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -68,15 +68,16 @@ public class UserManagementService implements UserDetailsService {
 		}
 		return user;
 	}
-	
-//	public List<ApplicationUser> findUsersByUsernames(String[] loginIds) throws UsernameNotFoundException {
-//		List<ApplicationUser> users = userRepository.findByLoginIdIn(loginIds);
-//		if (users == null) {
-//			throw new UsernameNotFoundException(loginIds.toString());
-//		}
-//		return users;
-//	}
-	
+
+	// public List<ApplicationUser> findUsersByUsernames(String[] loginIds) throws
+	// UsernameNotFoundException {
+	// List<ApplicationUser> users = userRepository.findByLoginIdIn(loginIds);
+	// if (users == null) {
+	// throw new UsernameNotFoundException(loginIds.toString());
+	// }
+	// return users;
+	// }
+
 	public List<ApplicationUser> findUsersByUsernames(List<String> loginIds) throws UsernameNotFoundException {
 		List<ApplicationUser> users = userRepository.findByLoginIdIn(loginIds);
 		if (users == null) {
@@ -108,14 +109,14 @@ public class UserManagementService implements UserDetailsService {
 		if (!loginId.equals(user.getLoginId())) {
 			throw new UserManagementException("Cannot change another user account. LoginId mismatch!");
 		}
-		
+
 		ApplicationUser dbUser = userRepository.findByLoginId(loginId);
 
 		if (dbUser == null) {
 			throw new UsernameNotFoundException("User with loginId '" + user.getLoginId() + "' does not exist.");
 		}
-		
-		if(!user.getPassword().equals(dbUser.getPassword())) {
+
+		if (!user.getPassword().equals(dbUser.getPassword())) {
 			throw new PasswordChangedException("DataMismatch: Not allowed to change password from here!");
 		}
 
@@ -133,25 +134,26 @@ public class UserManagementService implements UserDetailsService {
 
 	/**
 	 * Saves user to DB efficiently in one db call
+	 * 
 	 * @param users
 	 * @return
 	 */
 	public List<ApplicationUser> saveUser(ApplicationUser... users) {
-		
+
 		List<ApplicationUser> appUsersList = new ArrayList<>(users.length);
 
-		for(ApplicationUser user : users) {
+		for (ApplicationUser user : users) {
 			appUsersList.add(user);
 		}
-	
+
 		appUsersList = userRepository.save(appUsersList);
 		logger.debug("User saved successfully to database.");
 		return appUsersList;
 	}
-	
-	
+
 	/**
 	 * Update the rating of all users based on the tripRating
+	 * 
 	 * @param rating
 	 * @param users
 	 */
@@ -159,44 +161,61 @@ public class UserManagementService implements UserDetailsService {
 		List<ApplicationUser> users = findUsersByUsernames(usersIds);
 		for (ApplicationUser user : users) {
 			// Running mean
-			double runningMean = ((user.getTripsTillNow() * user.getUserRating()) + rating) 
-					/ user.getTripsTillNow() +1;
+			double tripsTillNow = 0;
+			double userRating = 0;
+
+			if (user.getTripsTillNow() != null)
+				tripsTillNow = user.getTripsTillNow();
+
+			if (user.getUserRating() != null)
+				userRating = user.getUserRating();
+
+			double runningMean = ((tripsTillNow * userRating) + rating) / tripsTillNow + 1;
 			user.setUserRating(runningMean);
 		}
-		
+
 		userRepository.save(users);
 	}
-	
+
 	/**
-	 * Service method that finds all the user that have requested to join a particular trip
-	 * and then removes the trip request from that user.
+	 * Service method that finds all the user that have requested to join a
+	 * particular trip and then removes the trip request from that user.
+	 * 
 	 * @param trip
 	 */
 	public void deleteTripRequestsInUsers(Trip trip) {
 		List<ApplicationUser> appusers = userRepository.findByTripsRequestsMade(trip);
-		for(ApplicationUser appuser : appusers) {
-			for(Trip t : appuser.getTripsRequestsMade()) {
-				if(t.getTripId().equals(trip.getTripId())) {
-					appuser.getTripsRequestsMade().remove(t);
+
+		for (ApplicationUser appuser : appusers) {
+			List<Trip> trips = appuser.getTripsRequestsMade();
+			for (Iterator<Trip> iter = trips.listIterator(); iter.hasNext();) {
+				Trip t = iter.next();
+				if (t.getTripId().equals(trip.getTripId())) {
+					iter.remove();
 				}
-					
 			}
 		}
-		
+
 		userRepository.save(appusers);
 	}
-	
-	
+
 	/**
 	 * Service method that deletes the trip acceptance requests from the Admin.
+	 * 
 	 * @param trip
 	 */
 	public void deleteTripAccRequestsByAdmin(Trip trip) {
 		ApplicationUser admin = findUserByUsername(trip.getAdmin());
-		for (TripJoinRequestDto tripReq : admin.getTripsRequestsAwaitingConfirmation()) {
-			if(tripReq.getTrip().getTripId().equals(trip.getTripId())) {
-				admin.getTripsRequestsAwaitingConfirmation().remove(tripReq);
+		List<TripJoinRequestDto> tripReqs = admin.getTripsRequestsAwaitingConfirmation();
+		
+		for (Iterator<TripJoinRequestDto> iter = tripReqs.listIterator(); iter.hasNext();) {
+			TripJoinRequestDto tripReq = iter.next();
+			
+			if (tripReq.getTrip().getTripId().equals(trip.getTripId())) {
+				iter.remove();
 			}
 		}
+		userRepository.save(admin);
 	}
+	
 }
