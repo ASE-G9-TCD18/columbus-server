@@ -81,7 +81,15 @@ public class SearchService {
 		tripWithScoreList.sort(new TripScoreComparator());
 		trips = new ArrayList<>();
 		for (TripScoreDto tripWithScore : tripWithScoreList) {
-			trips.add(tripWithScore.getTrip());
+			Trip trip = tripWithScore.getTrip();
+
+			if (trip.getTripUsersLoginIds().contains(loginId)|| trip.getAdmin().equals(loginId)){
+				logger.info("current user is present in the trip! Skip this trip.");
+			}
+			else{
+				logger.info("current user is not present in the trip.");
+				trips.add(tripWithScore.getTrip());
+			}
 		}
 		return trips;
 	}

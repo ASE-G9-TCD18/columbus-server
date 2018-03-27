@@ -221,8 +221,8 @@ public class TripService {
 	
 	/**
 	 * Accepts trip join request
-	 * @param loginId
-	 * @param tripId
+	 * @param adminLoginId
+	 * @param tripJoinRequest
 	 * @throws TripRequestedByUnAuthorizedUserException 
 	 */
 	@Transactional
@@ -305,10 +305,9 @@ public class TripService {
 	 * 
 	 * Adds the trip join request in the list of pending requests of Admin.
 	 * 
-	 * @param Applicationuser
+	 * @param admin
 	 *            admin
-	 * @param TripJoinRequestDto
-	 *            tripJoinRequest
+	 * @param tripJoinRequestDto
 	 * @return Applicationuser admin
 	 */
 	private ApplicationUser setTripJoinReqForAdmin(ApplicationUser admin, TripJoinRequestDto tripJoinRequestDto) {
@@ -324,10 +323,8 @@ public class TripService {
 	/**
 	 * Add the trip join request in the list of request in the joinee.
 	 * 
-	 * @param ApplicationUser
-	 *            joinee
-	 * @param Trip
-	 *            trip
+	 * @param joinee
+	 * @param trip
 	 * @return ApplicationUser joinee
 	 */
 	private ApplicationUser setTripJoinReqForJoinee(ApplicationUser joinee, Trip trip) {
@@ -365,7 +362,7 @@ public class TripService {
 	
 	/**
 	 * Service method that deletes the trip if the logged in user is the trip owner.
-	 * @param loginId
+	 * @param adminLoginId
 	 * @param tripId
 	 * @return
 	 * @throws TripRequestedByUnAuthorizedUserException 
@@ -444,7 +441,7 @@ public class TripService {
 
 	private double getRunningMean(int n, double mean, double a) {
 		
-		return 0;
+		return (mean*n+a)/(n+1);
 	}
 	
 	private void removeTripFromUser(String loginId, Trip trip) {
