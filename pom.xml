@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.group9</groupId>
 	<artifactId>columbus-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 
 	<name>Columbus REST API Server</name>
 	<description>Backend server for columbus.</description>
