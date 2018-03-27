@@ -15,8 +15,6 @@ import com.group9.columbus.service.TripService;
 import com.group9.columbus.utils.CommonUtils;
 import com.group9.columbus.utils.JsonUtils;
 
-
-
 @RestController
 @RequestMapping(value = "/trips")
 public class TripsController {
@@ -45,11 +43,23 @@ public class TripsController {
 		
 		return JsonUtils.getJsonForResponse(trips);
 	}
+	
 
 	@RequestMapping(path = "/all", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getSuperAllTrips() {
 		List<Trip> trips = tripService.getAllTrips();
 		logger.info("Request for all trips for all users");
+
+		return JsonUtils.getJsonForResponse(trips);
+	}
+	
+	
+	@RequestMapping(path = "/created", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<String> getAllCreatedTrips() {
+		String loginId = commonUtils.getLoggedInUserLoginId();
+		
+		List<Trip> trips = tripService.getAllCreatedTrips(loginId);
+		logger.info("Request for all created trips for logged in user ("+loginId+").");
 
 		return JsonUtils.getJsonForResponse(trips);
 	}
