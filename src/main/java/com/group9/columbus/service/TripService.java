@@ -2,11 +2,8 @@ package com.group9.columbus.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import com.group9.columbus.entity.Preference;
@@ -16,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 import com.group9.columbus.comparator.DestinationDistanceComparator;
@@ -182,8 +178,10 @@ public class TripService {
 	 * @throws TripManagementException
 	 */
 	@Transactional
-	public void requestJoinTrip(String loginId, String tripId) throws TripManagementException {
+	public String requestJoinTrip(String loginId, String tripId) throws TripManagementException {
 
+		boolean sentNotif = false;
+		
 		Trip trip = getTripById(tripId);
 		ApplicationUser requestFrom = userMgmtService.findUserByUsername(loginId);
 		ApplicationUser requestTo = userMgmtService.findUserByUsername(trip.getAdmin());
@@ -195,24 +193,30 @@ public class TripService {
 		// If join request notification send successfully to admin then
 		// persist to database
 		if (notifService.sendNewJoinRequestNotification(requestTo.getDeviceId(), requestFrom.getLoginId())) {
-			logger.info("Notification to join trip by (" + requestFrom.getLoginId() + ") sent to ("
-					+ requestTo.getLoginId() + ").");
-
-			// Add this trip to the list of trips whose join request is pending
-			requestFrom = setTripJoinReqForJoinee(requestFrom, trip);
-
-			// Add this request to list of requests in the admin
-			TripJoinRequestDto tripJoinRequestDto = new TripJoinRequestDto(requestFrom.getLoginId(),
-					requestTo.getLoginId(), trip);
-			requestTo = setTripJoinReqForAdmin(requestTo, tripJoinRequestDto);
-
-			// TODO discuss whether join request is a trip specific thing or user specific
-			// Save the user
-			userMgmtService.saveUser(requestFrom, requestTo);
-		} else {
-			logger.error("Unable to send notification. Check error log of NotificationService.");
-			throw new TripManagementException("Unable to complete request. Please try again later.");
+			sentNotif = true;
 		}
+		
+		logger.info("Notification to join trip by (" + requestFrom.getLoginId() + ") sent to ("+requestTo.getLoginId() + ").");
+
+		// Add this trip to the list of trips whose join request is pending
+		requestFrom = setTripJoinReqForJoinee(requestFrom, trip);
+
+		// Add this request to list of requests in the admin
+		TripJoinRequestDto tripJoinRequestDto = new TripJoinRequestDto(requestFrom.getLoginId(),
+				requestTo.getLoginId(), trip);
+		requestTo = setTripJoinReqForAdmin(requestTo, tripJoinRequestDto);
+
+		// TODO discuss whether join request is a trip specific thing or user specific
+		// Save the user
+		userMgmtService.saveUser(requestFrom, requestTo);
+			
+		if(!sentNotif) {
+			String message = "Unable to send notification. User: "+loginId+" successfully joined the trip: "+tripId;
+			logger.error(message);
+			return message;
+		}
+		
+		return "User: "+loginId+" successfully joined the trip: "+tripId;
 	}
 	
 	/**
@@ -375,17 +379,23 @@ public class TripService {
 		}
 		
 		// Delete the join requests made by all users
+	    userMgmtService.deleteTripRequestsInUsers(trip);
 		
 		// Delete the acceptance requests to the admin
+	    userMgmtService.deleteTripAccRequestsByAdmin(trip);
 		
 		// Delete the trip in all users
 		List<String> tripUsers = trip.getTripUsersLoginIds();
 		for(String tripUser : tripUsers) {
-			
+			removeTripFromUser(tripUser, trip);
 		}
 		
 		// Delete the trip
+		tripRepo.delete(trip.getId());
+		
+		return true;
 	}
+
 
 	/**
 	 * Generates a unique tripId which is a combination of yyMMdd + 4 random digits.
@@ -435,5 +445,11 @@ public class TripService {
 	private double getRunningMean(int n, double mean, double a) {
 		
 		return 0;
+	}
+	
+	private void removeTripFromUser(String loginId, Trip trip) {
+		ApplicationUser appUser = userMgmtService.findUserByUsername(loginId);
+		appUser.getTrips().remove(trip);
+		userMgmtService.saveUser(appUser);
 	}
 }

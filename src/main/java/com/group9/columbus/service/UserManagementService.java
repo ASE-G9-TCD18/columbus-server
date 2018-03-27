@@ -1,6 +1,8 @@
 package com.group9.columbus.service;
 
+import com.group9.columbus.dto.TripJoinRequestDto;
 import com.group9.columbus.entity.ApplicationUser;
+import com.group9.columbus.entity.Trip;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,5 +165,38 @@ public class UserManagementService implements UserDetailsService {
 		}
 		
 		userRepository.save(users);
+	}
+	
+	/**
+	 * Service method that finds all the user that have requested to join a particular trip
+	 * and then removes the trip request from that user.
+	 * @param trip
+	 */
+	public void deleteTripRequestsInUsers(Trip trip) {
+		List<ApplicationUser> appusers = userRepository.findByTripsRequestsMade(trip);
+		for(ApplicationUser appuser : appusers) {
+			for(Trip t : appuser.getTripsRequestsMade()) {
+				if(t.getTripId().equals(trip.getTripId())) {
+					appuser.getTripsRequestsMade().remove(t);
+				}
+					
+			}
+		}
+		
+		userRepository.save(appusers);
+	}
+	
+	
+	/**
+	 * Service method that deletes the trip acceptance requests from the Admin.
+	 * @param trip
+	 */
+	public void deleteTripAccRequestsByAdmin(Trip trip) {
+		ApplicationUser admin = findUserByUsername(trip.getAdmin());
+		for (TripJoinRequestDto tripReq : admin.getTripsRequestsAwaitingConfirmation()) {
+			if(tripReq.getTrip().getTripId().equals(trip.getTripId())) {
+				admin.getTripsRequestsAwaitingConfirmation().remove(tripReq);
+			}
+		}
 	}
 }

@@ -93,17 +93,17 @@ public class TripController {
 
 		logger.info("Request received to join trip ("+tripId+") by ("+loginId+").");
 		try {
-			tripService.requestJoinTrip(loginId, tripId);
+			String message = tripService.requestJoinTrip(loginId, tripId);
 			logger.info("Request to join ("+tripId+") by ("+loginId+") processed successfully.");
+			
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(CommonUtils.createResponseMessage(message));
 		}
 		catch(Exception ex){
 			logger.error(ex);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(CommonUtils.createErrorResponseMessage(ex.getMessage()));
 		}
-		
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(CommonUtils.createResponseMessage("User: "+loginId+" successfully joined the trip: "+tripId));
 	}
 
 	@RequestMapping(path = "/{tripId}/accept", method = RequestMethod.POST, produces = "application/json")
