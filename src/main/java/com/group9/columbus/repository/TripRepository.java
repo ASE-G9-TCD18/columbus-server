@@ -18,5 +18,7 @@ public interface TripRepository extends MongoRepository<Trip, String> {
 	public List<Trip> findAllTrips();
 
 	public List<Trip> findByTripType(String tripType);
-
+	
+	public List<Trip> findByAdmin(String admin);
+	
 }

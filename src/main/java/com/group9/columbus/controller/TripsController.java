@@ -2,11 +2,9 @@ package com.group9.columbus.controller;
 
 import java.util.List;
 
-import com.group9.columbus.exception.TripManagementException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +14,6 @@ import com.group9.columbus.repository.UserRepository;
 import com.group9.columbus.service.TripService;
 import com.group9.columbus.utils.CommonUtils;
 import com.group9.columbus.utils.JsonUtils;
-
-
 
 @RestController
 @RequestMapping(value = "/trips")
@@ -47,6 +43,7 @@ public class TripsController {
 		
 		return JsonUtils.getJsonForResponse(trips);
 	}
+	
 
 	@RequestMapping(path = "/all", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getSuperAllTrips() {
@@ -55,5 +52,17 @@ public class TripsController {
 
 		return JsonUtils.getJsonForResponse(trips);
 	}
+	
+	
+	@RequestMapping(path = "/created", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<String> getAllCreatedTrips() {
+		String loginId = commonUtils.getLoggedInUserLoginId();
+		
+		List<Trip> trips = tripService.getAllCreatedTrips(loginId);
+		logger.info("Request for all created trips for logged in user ("+loginId+").");
+
+		return JsonUtils.getJsonForResponse(trips);
+	}
+	
 }
 

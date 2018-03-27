@@ -93,17 +93,17 @@ public class TripController {
 
 		logger.info("Request received to join trip ("+tripId+") by ("+loginId+").");
 		try {
-			tripService.requestJoinTrip(loginId, tripId);
+			String message = tripService.requestJoinTrip(loginId, tripId);
 			logger.info("Request to join ("+tripId+") by ("+loginId+") processed successfully.");
+			
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(CommonUtils.createResponseMessage(message));
 		}
 		catch(Exception ex){
 			logger.error(ex);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(CommonUtils.createErrorResponseMessage(ex.getMessage()));
 		}
-		
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(CommonUtils.createResponseMessage("User: "+loginId+" successfully joined the trip: "+tripId));
 	}
 
 	@RequestMapping(path = "/{tripId}/accept", method = RequestMethod.POST, produces = "application/json")
@@ -136,18 +136,23 @@ public class TripController {
 		prefs.add(maxSize);
 		return ResponseEntity.ok(prefs);
 	}
-
-	@RequestMapping(path="/search", method=RequestMethod.POST, produces="application/json")
-	public ResponseEntity<Criteria> getCriteria(@RequestBody Criteria criteria){
-
-		return ResponseEntity.ok(criteria);
-
+	
+	@RequestMapping(path = "/{tripId}", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<String> deleteTrip(@PathVariable("tripId") String tripId) {
+		String loginId = commonUtils.getLoggedInUserLoginId();
+		
+		try {
+			tripService.deleteTrip(loginId, tripId);
+			logger.info("Request for trip details for tripId ("+tripId+") by ("+loginId+") processed successfully.");
+			
+		} catch (TripManagementException tme) {
+			logger.error(tme);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(CommonUtils.createErrorResponseMessage(tme.getMessage()));
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(CommonUtils.createResponseMessage("Trip: "+tripId+" deleted successfully."));
 	}
-
-	@RequestMapping(path = "/temp", method = RequestMethod.GET, produces = "application/json")
-	public Point testGeo() {
-		Point pt = new Point();
-		pt.setLocation(45, 45);
-		return pt;
-	}
+	
 }

@@ -28,6 +28,8 @@ public class Trip {
 	
 	private String admin;
 	
+	private Double tripRating;
+	
 	@DBRef
 	private Conversation conversation;
 
@@ -85,6 +87,14 @@ public class Trip {
 
 	public void setAdmin(String admin) {
 		this.admin = admin;
+	}
+	
+	public Double getTripRating() {
+		return tripRating;
+	}
+
+	public void setTripRating(Double tripRating) {
+		this.tripRating = tripRating;
 	}
 
 	public Conversation getConversation() {
