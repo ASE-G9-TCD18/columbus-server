@@ -93,11 +93,10 @@ public class TripController {
 
 		logger.info("Request received to join trip ("+tripId+") by ("+loginId+").");
 		try {
-			String message = tripService.requestJoinTrip(loginId, tripId);
+			Trip trip = tripService.requestJoinTrip(loginId, tripId);
 			logger.info("Request to join ("+tripId+") by ("+loginId+") processed successfully.");
 			
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(CommonUtils.createResponseMessage(message));
+			return JsonUtils.getJsonForResponse(trip);
 		}
 		catch(Exception ex){
 			logger.error(ex);

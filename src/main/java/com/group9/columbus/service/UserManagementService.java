@@ -97,6 +97,9 @@ public class UserManagementService implements UserDetailsService {
 
 			// UserDto userDto = new UserDto(userRepository.save(user));
 			// return userDto;
+			user.setTripsRequestsAwaitingConfirmation(new ArrayList<TripJoinRequestDto>());
+			user.setTripsRequestsMade(new ArrayList<Trip>());
+			
 			return userRepository.save(user);
 		} else {
 			throw new UserExistsException("User with loginId: " + user.getLoginId() + " already present!");

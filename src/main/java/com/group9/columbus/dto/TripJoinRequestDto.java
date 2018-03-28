@@ -8,7 +8,7 @@ import com.group9.columbus.entity.Trip;
  * Basic DTO that stores a trip join request.
  * @author amit
  */
-public class TripJoinRequestDto {
+public class TripJoinRequestDto {;
 	
 	private String requestFrom;
 	

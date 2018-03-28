@@ -93,8 +93,8 @@ public class TripServiceTest {
 		preferences.add(agePref);
 		
 		List<TripStop> tripStops = new ArrayList<>();
-		TripStop startPos = new TripStop(1,new LatLng(53.2711963, -6.2045213)); // Central Park 
-		TripStop endPos = new TripStop(1,new LatLng(53.3437967, -6.2567603)); // Trinity
+		TripStop startPos = new TripStop(1,new LatLng(53.2711963, -6.2045213), "Central Park"); // Central Park 
+		TripStop endPos = new TripStop(1,new LatLng(53.3437967, -6.2567603), "Trinity"); // Trinity
 
 		tripStops.add(startPos);
 		tripStops.add(endPos);
@@ -133,8 +133,8 @@ public class TripServiceTest {
 		preferences.add(agePref);
 
 		List<TripStop> tripStops = new ArrayList<>();
-		TripStop startPos = new TripStop(1,new LatLng(53.2711963, -6.2045213)); // Central Park
-		TripStop endPos = new TripStop(1,new LatLng(53.3437967, -6.2567603)); // Trinity
+		TripStop startPos = new TripStop(1,new LatLng(53.2711963, -6.2045213), " Central Park"); // Central Park
+		TripStop endPos = new TripStop(1,new LatLng(53.3437967, -6.2567603), "Trinity"); // Trinity
 
 		tripStops.add(startPos);
 		tripStops.add(endPos);

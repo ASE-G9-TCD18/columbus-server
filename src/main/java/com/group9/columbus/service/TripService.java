@@ -178,7 +178,7 @@ public class TripService {
 	 * @throws TripManagementException
 	 */
 	@Transactional
-	public String requestJoinTrip(String loginId, String tripId) throws TripManagementException {
+	public Trip requestJoinTrip(String loginId, String tripId) throws TripManagementException {
 
 		boolean sentNotif = false;
 
@@ -215,10 +215,9 @@ public class TripService {
 			String message = "Unable to send notification. User: " + loginId + " successfully joined the trip: "
 					+ tripId;
 			logger.error(message);
-			return message;
 		}
 
-		return "User: " + loginId + " successfully joined the trip: " + tripId;
+		return trip;
 	}
 
 	/**
@@ -261,10 +260,11 @@ public class TripService {
 		user.getTrips().add(trip);
 
 		// remove trip request
-		for (Trip reqTrip : user.getTripsRequestsMade()) {
+		List<Trip> reqTrips = user.getTripsRequestsMade();
+		for (Iterator<Trip> iter = reqTrips.listIterator(); iter.hasNext();) {
+			Trip reqTrip = iter.next();
 			if (reqTrip.getTripId().equals(trip.getTripId())) {
-				user.getTripsRequestsMade().remove(reqTrip);
-				break;
+				iter.remove();
 			}
 		}
 		userMgmtService.saveUser(user);
@@ -272,10 +272,12 @@ public class TripService {
 		// remove the request from admin
 		ApplicationUser admin = userMgmtService.findUserByUsername(adminLoginId);
 
-		for (TripJoinRequestDto joinReqDto : admin.getTripsRequestsAwaitingConfirmation()) {
+		List<TripJoinRequestDto> joinReqDtos = admin.getTripsRequestsAwaitingConfirmation();
+		for (Iterator<TripJoinRequestDto> iter = joinReqDtos.listIterator(); iter.hasNext();) {
+			
+			TripJoinRequestDto joinReqDto = iter.next();
 			if (joinReqDto.getTrip().getTripId().equals(tripJoinRequest.getTrip().getTripId())) {
-				admin.getTripsRequestsAwaitingConfirmation().remove(joinReqDto);
-				break;
+				iter.remove();
 			}
 
 		}
@@ -283,7 +285,7 @@ public class TripService {
 
 		// Update User Rating in accordance with Trip Rating
 		userMgmtService.updateUserRating(trip.getTripRating(), trip.getTripUsersLoginIds());
-
+		
 	}
 
 	// TODO: Optimize this later to get limited details only
