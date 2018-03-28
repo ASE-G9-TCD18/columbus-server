@@ -188,7 +188,7 @@ public class UserManagementService implements UserDetailsService {
 
 		for (ApplicationUser appuser : appusers) {
 			List<Trip> trips = appuser.getTripsRequestsMade();
-			if (trips != null || trips.size() != 0) {
+			if (trips != null && trips.size() != 0) {
 				for (Iterator<Trip> iter = trips.listIterator(); iter.hasNext();) {
 					Trip t = iter.next();
 					if (t.getTripId().equals(trip.getTripId())) {
@@ -210,7 +210,7 @@ public class UserManagementService implements UserDetailsService {
 		ApplicationUser admin = findUserByUsername(trip.getAdmin());
 		List<TripJoinRequestDto> tripReqs = admin.getTripsRequestsAwaitingConfirmation();
 
-		if (tripReqs != null || tripReqs.size() != 0) {
+		if (tripReqs != null && tripReqs.size() != 0) {
 			for (Iterator<TripJoinRequestDto> iter = tripReqs.listIterator(); iter.hasNext();) {
 				TripJoinRequestDto tripReq = iter.next();
 
