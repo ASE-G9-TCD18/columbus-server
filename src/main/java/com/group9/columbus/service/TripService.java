@@ -31,6 +31,10 @@ import com.group9.columbus.utils.GreatCircleDistance;
 
 import static com.group9.columbus.enums.PreferenceType.GROUP_MAX_SIZE;
 
+/**
+ * Service class for {@link Trip}.
+ * @author amit
+ */
 @Service
 public class TripService {
 
@@ -101,18 +105,6 @@ public class TripService {
 	}
 
 	/**
-	 * Return all the trips matching the criteria
-	 * 
-	 * @param criteria
-	 *            the trip criteria
-	 * @return all tripId
-	 */
-	public List<Trip> searchTrip(List<Preference> criteria) {
-
-		return null;
-	}
-
-	/**
 	 * This method returns the trip for the logged in user by tripId
 	 * 
 	 * @param loginId
@@ -178,7 +170,7 @@ public class TripService {
 	 * @throws TripManagementException
 	 */
 	@Transactional
-	public String requestJoinTrip(String loginId, String tripId) throws TripManagementException {
+	public Trip requestJoinTrip(String loginId, String tripId) throws TripManagementException {
 
 		boolean sentNotif = false;
 
@@ -204,7 +196,7 @@ public class TripService {
 
 		// Add this request to list of requests in the admin
 		TripJoinRequestDto tripJoinRequestDto = new TripJoinRequestDto(requestFrom.getLoginId(), requestTo.getLoginId(),
-				trip);
+				trip.getTripId());
 		requestTo = setTripJoinReqForAdmin(requestTo, tripJoinRequestDto);
 
 		// TODO discuss whether join request is a trip specific thing or user specific
@@ -215,10 +207,9 @@ public class TripService {
 			String message = "Unable to send notification. User: " + loginId + " successfully joined the trip: "
 					+ tripId;
 			logger.error(message);
-			return message;
 		}
 
-		return "User: " + loginId + " successfully joined the trip: " + tripId;
+		return trip;
 	}
 
 	/**
@@ -232,7 +223,9 @@ public class TripService {
 	public void acceptJoinTrip(String adminLoginId, TripJoinRequestDto tripJoinRequest)
 			throws TripRequestedByUnAuthorizedUserException {
 
-		if (!adminLoginId.equals(tripJoinRequest.getTrip().getAdmin())) {
+		Trip trip = tripRepo.findByTripId(tripJoinRequest.getTripId());
+		
+		if (!adminLoginId.equals(trip.getAdmin())) {
 			throw new TripRequestedByUnAuthorizedUserException(
 					"You do not have sufficient permissions to " + "accept this request");
 		}
@@ -241,7 +234,7 @@ public class TripService {
 		ApplicationUser user = userMgmtService.findUserByUsername(tripJoinRequest.getRequestFrom());
 
 		// Some other logic...
-		Trip trip = tripRepo.findByTripId(tripJoinRequest.getTrip().getTripId());
+		
 		// Add the user to the Trip
 		trip.getTripUsersLoginIds().add(tripJoinRequest.getRequestFrom());
 		int n = trip.getTripUsersLoginIds().size();
@@ -261,10 +254,11 @@ public class TripService {
 		user.getTrips().add(trip);
 
 		// remove trip request
-		for (Trip reqTrip : user.getTripsRequestsMade()) {
+		List<Trip> reqTrips = user.getTripsRequestsMade();
+		for (Iterator<Trip> iter = reqTrips.listIterator(); iter.hasNext();) {
+			Trip reqTrip = iter.next();
 			if (reqTrip.getTripId().equals(trip.getTripId())) {
-				user.getTripsRequestsMade().remove(reqTrip);
-				break;
+				iter.remove();
 			}
 		}
 		userMgmtService.saveUser(user);
@@ -272,10 +266,12 @@ public class TripService {
 		// remove the request from admin
 		ApplicationUser admin = userMgmtService.findUserByUsername(adminLoginId);
 
-		for (TripJoinRequestDto joinReqDto : admin.getTripsRequestsAwaitingConfirmation()) {
-			if (joinReqDto.getTrip().getTripId().equals(tripJoinRequest.getTrip().getTripId())) {
-				admin.getTripsRequestsAwaitingConfirmation().remove(joinReqDto);
-				break;
+		List<TripJoinRequestDto> joinReqDtos = admin.getTripsRequestsAwaitingConfirmation();
+		for (Iterator<TripJoinRequestDto> iter = joinReqDtos.listIterator(); iter.hasNext();) {
+
+			TripJoinRequestDto joinReqDto = iter.next();
+			if (joinReqDto.getTripId().equals(tripJoinRequest.getTripId())) {
+				iter.remove();
 			}
 
 		}
@@ -405,13 +401,39 @@ public class TripService {
 
 		return true;
 	}
+
 	
-	
+	/**
+	 * Service method that checks if the trip is existent and then deletes the user from trip as well as the trip
+	 * from the user.
+	 * @param loginId
+	 * @param tripId
+	 * @throws TripManagementException
+	 */
+	@Transactional
+	public boolean leaveTrip(String loginId, String tripId) throws TripManagementException {
+		Trip trip = getTripById(tripId);
+
+		if (trip == null)
+			throw new TripManagementException("No such trip found with id (" + tripId + ") found!");
+
+		ApplicationUser user = userMgmtService.findUserByUsername(loginId);
+
+		// Remvoe the trip from the user.
+		removeTripFromUser(loginId, trip);
+		
+		// Remove the user from the trip.
+		removeUserFromTrip(loginId, trip);
+		
+		return true;
+	}
+
 	public List<Trip> getAllCreatedTrips(String adminLoginId) {
 		List<Trip> trips = tripRepo.findByAdmin(adminLoginId);
 		return trips;
 	}
 
+	
 	/**
 	 * Generates a unique tripId which is a combination of yyMMdd + 4 random digits.
 	 * 
@@ -431,6 +453,7 @@ public class TripService {
 		}
 		throw new RuntimeException("No Preference as " + GROUP_MAX_SIZE + " found in trip");
 	}
+	
 
 	/**
 	 * Check if trip is full or not.
@@ -443,7 +466,15 @@ public class TripService {
 	private boolean isFull(Trip trip) {
 		return getTripCapacity(trip) < trip.getTripUsersLoginIds().size() + 1;
 	}
+	
 
+	/**
+	 * Helper method that extracts the {@link Trip} 's from {@link TripAndDistanceDto} 's and returns the 
+	 * top K {@link Trip}s.
+	 * @param k
+	 * @param tripAndDistanceDtos
+	 * @return
+	 */
 	private List<Trip> getTopKTrip(int k, List<TripAndDistanceDto> tripAndDistanceDtos) {
 		List<Trip> trips = new ArrayList<>();
 		if (k > tripAndDistanceDtos.size())
@@ -456,6 +487,13 @@ public class TripService {
 		return trips;
 	}
 
+	/**
+	 * Helper method to calculate the running mean.
+	 * @param n
+	 * @param mean
+	 * @param a
+	 * @return
+	 */
 	private double getRunningMean(int n, double mean, double a) {
 		try {
 
@@ -464,7 +502,13 @@ public class TripService {
 			return 0.0;
 		}
 	}
+	
 
+	/**
+	 * Helper method that removes the trip from a user with loginId.
+	 * @param loginId
+	 * @param trip
+	 */
 	private void removeTripFromUser(String loginId, Trip trip) {
 		ApplicationUser appUser = userMgmtService.findUserByUsername(loginId);
 
@@ -477,5 +521,29 @@ public class TripService {
 			}
 		}
 		userMgmtService.saveUser(appUser);
+	}
+	
+
+	/**
+	 * Helper method that removes the user with loginid from the trip.
+	 * @param loginId
+	 * @param trip
+	 */
+	private void removeUserFromTrip(String loginId, Trip trip) {
+
+		List<String> tripUsers = trip.getTripUsersLoginIds();
+
+		if (tripUsers != null && tripUsers.size() != 0) {
+
+			for (Iterator<String> iter = tripUsers.listIterator(); iter.hasNext();) {
+				String tripUser = iter.next();
+
+				if (tripUser.equals(loginId)) {
+					iter.remove();
+				}
+			}
+			tripRepo.save(trip);
+		}
+		
 	}
 }

@@ -97,6 +97,9 @@ public class UserManagementService implements UserDetailsService {
 
 			// UserDto userDto = new UserDto(userRepository.save(user));
 			// return userDto;
+			user.setTripsRequestsAwaitingConfirmation(new ArrayList<TripJoinRequestDto>());
+			user.setTripsRequestsMade(new ArrayList<Trip>());
+			
 			return userRepository.save(user);
 		} else {
 			throw new UserExistsException("User with loginId: " + user.getLoginId() + " already present!");
@@ -188,7 +191,7 @@ public class UserManagementService implements UserDetailsService {
 
 		for (ApplicationUser appuser : appusers) {
 			List<Trip> trips = appuser.getTripsRequestsMade();
-			if (trips != null || trips.size() != 0) {
+			if (trips != null && trips.size() != 0) {
 				for (Iterator<Trip> iter = trips.listIterator(); iter.hasNext();) {
 					Trip t = iter.next();
 					if (t.getTripId().equals(trip.getTripId())) {
@@ -210,11 +213,11 @@ public class UserManagementService implements UserDetailsService {
 		ApplicationUser admin = findUserByUsername(trip.getAdmin());
 		List<TripJoinRequestDto> tripReqs = admin.getTripsRequestsAwaitingConfirmation();
 
-		if (tripReqs != null || tripReqs.size() != 0) {
+		if (tripReqs != null && tripReqs.size() != 0) {
 			for (Iterator<TripJoinRequestDto> iter = tripReqs.listIterator(); iter.hasNext();) {
 				TripJoinRequestDto tripReq = iter.next();
 
-				if (tripReq.getTrip().getTripId().equals(trip.getTripId())) {
+				if (tripReq.getTripId().equals(trip.getTripId())) {
 					iter.remove();
 				}
 			}

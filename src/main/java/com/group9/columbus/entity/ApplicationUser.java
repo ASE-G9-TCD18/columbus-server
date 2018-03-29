@@ -23,7 +23,7 @@ public class ApplicationUser {
 	@Indexed(unique = true)
 	private String loginId;
 
-	@NotNull(message="Password cannot be left null.")
+	@NotNull(message = "Password cannot be left null.")
 	private String password;
 
 	@NotNull(message = "First Name cannot be left null.")
@@ -31,30 +31,30 @@ public class ApplicationUser {
 
 	private String lastName;
 
-	@NotNull(message="Age cannot be left null.")
+	@NotNull(message = "Age cannot be left null.")
 	private String age;
 
-	@NotNull(message="Email Id cannot be left null.")
+	@NotNull(message = "Email Id cannot be left null.")
 	private String emailId;
 
 	@NotNull(message = "Contact number cannot be left null.")
 	private String contactNumber;
-	
-	@NotNull(message="User rating cannot be left null.")
+
+	@NotNull(message = "User rating cannot be left null.")
 	private Double userRating;
 
 	private String deviceId;
 
 	private boolean active;
-	
+
 	@DBRef(lazy = true)
 	private List<Trip> trips;
-	
+
 	@DBRef(lazy = true)
 	private List<Trip> tripsRequestsMade;
-	
+
 	private List<TripJoinRequestDto> tripsRequestsAwaitingConfirmation;
-	
+
 	private Double tripsTillNow;
 
 	public String getId() {
@@ -73,12 +73,12 @@ public class ApplicationUser {
 		this.loginId = loginId;
 	}
 
-	//@JsonIgnore
+	// @JsonIgnore
 	public String getPassword() {
 		return password;
 	}
-	
-	//@JsonProperty
+
+	// @JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -175,7 +175,6 @@ public class ApplicationUser {
 
 	}
 
-
 	public ApplicationUser(String loginId, String password, String firstName, String lastName, String age,
 			String emailId, String contactNumber, Double userRating, boolean active, String deviceId) {
 		super();
@@ -193,8 +192,10 @@ public class ApplicationUser {
 
 	/**
 	 * Helper method to set details from the UserDto to the ApplicationUser.
-	 * Required because the client might not send the password and other security details. If used directly,
-	 * it might override the user details in the database.
+	 * Required because the client might not send the password and other security
+	 * details. If used directly, it might override the user details in the
+	 * database.
+	 * 
 	 * @param user
 	 */
 	@JsonIgnore
@@ -206,9 +207,11 @@ public class ApplicationUser {
 		this.contactNumber = user.getContactNumber();
 		this.userRating = user.getUserRating();
 	}
-	
+
 	/**
-	 * Helper method to enable deep copy of non-sensitive {@link ApplicationUser} details.
+	 * Helper method to enable deep copy of non-sensitive {@link ApplicationUser}
+	 * details.
+	 * 
 	 * @param user
 	 */
 	@JsonIgnore
@@ -228,9 +231,10 @@ public class ApplicationUser {
 				loginId, active, firstName, lastName, emailId);
 
 	}
-	
+
 	/**
 	 * Returns a deep copy of {@link ApplicationUser}.
+	 * 
 	 * @return
 	 */
 	@JsonIgnore
@@ -246,7 +250,7 @@ public class ApplicationUser {
 		user.contactNumber = contactNumber;
 		user.userRating = userRating;
 		user.active = active;
-		
+
 		return user;
 	}
 
