@@ -93,11 +93,10 @@ public class TripController {
 
 		logger.info("Request received to join trip ("+tripId+") by ("+loginId+").");
 		try {
-			String message = tripService.requestJoinTrip(loginId, tripId);
+			Trip trip = tripService.requestJoinTrip(loginId, tripId);
 			logger.info("Request to join ("+tripId+") by ("+loginId+") processed successfully.");
 			
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(CommonUtils.createResponseMessage(message));
+			return JsonUtils.getJsonForResponse(trip);
 		}
 		catch(Exception ex){
 			logger.error(ex);
@@ -153,6 +152,24 @@ public class TripController {
 		
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(CommonUtils.createResponseMessage("Trip: "+tripId+" deleted successfully."));
+	}
+	
+	@RequestMapping(path = "/{tripId}/leavetrip", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<String> leaveTrip(@PathVariable("tripId") String tripId) {
+		String loginId = commonUtils.getLoggedInUserLoginId();
+		
+		try {
+			tripService.deleteTrip(loginId, tripId);
+			logger.info("Leave trip request by ("+loginId+") for trip ("+tripId+") processed successfully.");
+			
+		} catch (TripManagementException tme) {
+			logger.error(tme);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(CommonUtils.createErrorResponseMessage(tme.getMessage()));
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(CommonUtils.createResponseMessage("Leave trip request by ("+loginId+") for trip ("+tripId+") processed successfully."));
 	}
 	
 }

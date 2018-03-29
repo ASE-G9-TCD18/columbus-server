@@ -15,7 +15,7 @@ public class Trip {
 	@Id
 	private String id;
 	
-	@Indexed(unique = true)
+	//@Indexed(unique = true)
 	private String tripId;
 
 	private TripType tripType;

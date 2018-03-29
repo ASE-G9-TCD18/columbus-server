@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
 import com.group9.columbus.comparator.TripScoreComparator;
 import com.group9.columbus.dto.TripDto;
@@ -24,9 +23,6 @@ import com.group9.columbus.enums.PreferenceType;
 public class SearchService {
 
 	private Logger logger = Logger.getLogger(SearchService.class);
-
-	@Autowired
-	private GpsService gpsService;
 
 	@Autowired
 	private TripService tripService;

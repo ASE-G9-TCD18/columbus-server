@@ -1,29 +1,25 @@
 package com.group9.columbus.dto;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
-import com.group9.columbus.entity.Trip;
 
 /**
  * Basic DTO that stores a trip join request.
  * @author amit
  */
-public class TripJoinRequestDto {
+public class TripJoinRequestDto {;
 	
 	private String requestFrom;
 	
 	private String requestTo;
 	
-	@DBRef(lazy=true)
-	private Trip trip;
+	private String tripId;
 
 	public TripJoinRequestDto() { }
 	
-	public TripJoinRequestDto(String requestFrom, String requestTo, Trip trip) {
+	public TripJoinRequestDto(String requestFrom, String requestTo, String tripId) {
 		super();
 		this.requestFrom = requestFrom;
 		this.requestTo = requestTo;
-		this.trip = trip;
+		this.tripId = tripId;
 	}
 
 	public String getRequestFrom() {
@@ -42,11 +38,11 @@ public class TripJoinRequestDto {
 		this.requestTo = requestTo;
 	}
 
-	public Trip getTrip() {
-		return trip;
+	public String getTripId() {
+		return tripId;
 	}
 
-	public void setTrip(Trip trip) {
-		this.trip = trip;
+	public void setTripId(String tripId) {
+		this.tripId = tripId;
 	}
 }

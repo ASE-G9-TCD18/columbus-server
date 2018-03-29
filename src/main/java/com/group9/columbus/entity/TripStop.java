@@ -8,11 +8,13 @@ public class TripStop {
 	private int sequenceNumber;
 	
 	private LatLng coordinate;
+	
+	private String location;
 
 	public TripStop() {
 	}
 	
-	public TripStop(int sequenceNumber, LatLng coordinate) {
+	public TripStop(int sequenceNumber, LatLng coordinate, String location) {
 		super();
 		this.sequenceNumber = sequenceNumber;
 		this.coordinate = coordinate;
@@ -32,6 +34,14 @@ public class TripStop {
 
 	public void setCoordinate(LatLng coordinate) {
 		this.coordinate = coordinate;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 }
