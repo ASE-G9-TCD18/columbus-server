@@ -196,7 +196,7 @@ public class TripService {
 
 		// Add this request to list of requests in the admin
 		TripJoinRequestDto tripJoinRequestDto = new TripJoinRequestDto(requestFrom.getLoginId(), requestTo.getLoginId(),
-				trip);
+				trip.getTripId());
 		requestTo = setTripJoinReqForAdmin(requestTo, tripJoinRequestDto);
 
 		// TODO discuss whether join request is a trip specific thing or user specific
@@ -223,7 +223,9 @@ public class TripService {
 	public void acceptJoinTrip(String adminLoginId, TripJoinRequestDto tripJoinRequest)
 			throws TripRequestedByUnAuthorizedUserException {
 
-		if (!adminLoginId.equals(tripJoinRequest.getTrip().getAdmin())) {
+		Trip trip = tripRepo.findByTripId(tripJoinRequest.getTripId());
+		
+		if (!adminLoginId.equals(trip.getAdmin())) {
 			throw new TripRequestedByUnAuthorizedUserException(
 					"You do not have sufficient permissions to " + "accept this request");
 		}
@@ -232,7 +234,7 @@ public class TripService {
 		ApplicationUser user = userMgmtService.findUserByUsername(tripJoinRequest.getRequestFrom());
 
 		// Some other logic...
-		Trip trip = tripRepo.findByTripId(tripJoinRequest.getTrip().getTripId());
+		
 		// Add the user to the Trip
 		trip.getTripUsersLoginIds().add(tripJoinRequest.getRequestFrom());
 		int n = trip.getTripUsersLoginIds().size();
@@ -268,7 +270,7 @@ public class TripService {
 		for (Iterator<TripJoinRequestDto> iter = joinReqDtos.listIterator(); iter.hasNext();) {
 
 			TripJoinRequestDto joinReqDto = iter.next();
-			if (joinReqDto.getTrip().getTripId().equals(tripJoinRequest.getTrip().getTripId())) {
+			if (joinReqDto.getTripId().equals(tripJoinRequest.getTripId())) {
 				iter.remove();
 			}
 

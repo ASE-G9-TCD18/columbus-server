@@ -217,7 +217,7 @@ public class UserManagementService implements UserDetailsService {
 			for (Iterator<TripJoinRequestDto> iter = tripReqs.listIterator(); iter.hasNext();) {
 				TripJoinRequestDto tripReq = iter.next();
 
-				if (tripReq.getTrip().getTripId().equals(trip.getTripId())) {
+				if (tripReq.getTripId().equals(trip.getTripId())) {
 					iter.remove();
 				}
 			}
