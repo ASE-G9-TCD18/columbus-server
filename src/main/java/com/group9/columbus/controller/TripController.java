@@ -154,4 +154,22 @@ public class TripController {
 				.body(CommonUtils.createResponseMessage("Trip: "+tripId+" deleted successfully."));
 	}
 	
+	@RequestMapping(path = "/{tripId}/leavetrip", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<String> leaveTrip(@PathVariable("tripId") String tripId) {
+		String loginId = commonUtils.getLoggedInUserLoginId();
+		
+		try {
+			tripService.deleteTrip(loginId, tripId);
+			logger.info("Request for trip details for tripId ("+tripId+") by ("+loginId+") processed successfully.");
+			
+		} catch (TripManagementException tme) {
+			logger.error(tme);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(CommonUtils.createErrorResponseMessage(tme.getMessage()));
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(CommonUtils.createResponseMessage("Trip: "+tripId+" deleted successfully."));
+	}
+	
 }
