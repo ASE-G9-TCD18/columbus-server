@@ -160,7 +160,7 @@ public class TripController {
 		
 		try {
 			tripService.deleteTrip(loginId, tripId);
-			logger.info("Request for trip details for tripId ("+tripId+") by ("+loginId+") processed successfully.");
+			logger.info("Leave trip request by ("+loginId+") for trip ("+tripId+") processed successfully.");
 			
 		} catch (TripManagementException tme) {
 			logger.error(tme);
@@ -169,7 +169,7 @@ public class TripController {
 		}
 		
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(CommonUtils.createResponseMessage("Trip: "+tripId+" deleted successfully."));
+				.body(CommonUtils.createResponseMessage("Leave trip request by ("+loginId+") for trip ("+tripId+") processed successfully."));
 	}
 	
 }

@@ -409,7 +409,7 @@ public class TripService {
 	 * @throws TripManagementException
 	 */
 	@Transactional
-	public void leaveTrip(String loginId, String tripId) throws TripManagementException {
+	public boolean leaveTrip(String loginId, String tripId) throws TripManagementException {
 		Trip trip = getTripById(tripId);
 
 		if (trip == null)
@@ -422,7 +422,8 @@ public class TripService {
 		
 		// Remove the user from the trip.
 		removeUserFromTrip(loginId, trip);
-
+		
+		return true;
 	}
 
 	public List<Trip> getAllCreatedTrips(String adminLoginId) {
