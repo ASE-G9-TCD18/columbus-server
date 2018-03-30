@@ -279,6 +279,10 @@ public class TripService {
 
 		// Update User Rating in accordance with Trip Rating
 		userMgmtService.updateUserRating(trip.getTripRating(), trip.getTripUsersLoginIds());
+		
+		// Send notification to joinee that his/her request was accepted
+		String notifMessage = "Your request to join Trip with id ("+trip.getTripId()+") was accepted.";
+		notifService.sendNotification(user.getDeviceId(), notifMessage);
 
 	}
 
@@ -426,6 +430,54 @@ public class TripService {
 		removeUserFromTrip(loginId, trip);
 		
 		return true;
+	}
+	
+	
+	/**
+	 * Service method that removes the trip join request from the admin as well as the joinee.
+	 * @param adminLoginId
+	 * @param tripJoinRequest
+	 * @throws TripManagementException
+	 */
+	public void rejectTripJoinRequest(String adminLoginId, TripJoinRequestDto tripJoinRequest) throws TripManagementException {
+
+		Trip trip = tripRepo.findByTripId(tripJoinRequest.getTripId());
+		
+		if (!adminLoginId.equals(trip.getAdmin())) {
+			throw new TripRequestedByUnAuthorizedUserException(
+					"You do not have sufficient permissions to " + "reject this request");
+		}
+
+		// update the joinee info about the trip
+		ApplicationUser user = userMgmtService.findUserByUsername(tripJoinRequest.getRequestFrom());
+
+		// remove trip request
+		List<Trip> reqTrips = user.getTripsRequestsMade();
+		for (Iterator<Trip> iter = reqTrips.listIterator(); iter.hasNext();) {
+			Trip reqTrip = iter.next();
+			if (reqTrip.getTripId().equals(trip.getTripId())) {
+				iter.remove();
+			}
+		}
+		userMgmtService.saveUser(user);
+
+		// remove the request from admin
+		ApplicationUser admin = userMgmtService.findUserByUsername(adminLoginId);
+
+		List<TripJoinRequestDto> joinReqDtos = admin.getTripsRequestsAwaitingConfirmation();
+		for (Iterator<TripJoinRequestDto> iter = joinReqDtos.listIterator(); iter.hasNext();) {
+
+			TripJoinRequestDto joinReqDto = iter.next();
+			if (joinReqDto.getTripId().equals(tripJoinRequest.getTripId())) {
+				iter.remove();
+			}
+
+		}
+		userMgmtService.saveUser(admin);
+
+		// Send notification to joinee that his/her request was accepted
+		String notifMessage = "Your request to join Trip with id ("+trip.getTripId()+") was rejected.";
+		notifService.sendNotification(user.getDeviceId(), notifMessage);
 	}
 
 	public List<Trip> getAllCreatedTrips(String adminLoginId) {

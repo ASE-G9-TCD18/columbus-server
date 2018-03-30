@@ -172,4 +172,30 @@ public class TripController {
 				.body(CommonUtils.createResponseMessage("Leave trip request by ("+loginId+") for trip ("+tripId+") processed successfully."));
 	}
 	
+	/**
+	 * API called when Admin wants to reject a join request for a user.
+	 * @param tripId
+	 * @param tripJoinRequest
+	 * @return
+	 */
+	@RequestMapping(path = "/{tripId}/reject", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<String> rejectTripJoinRequest(@PathVariable("tripId") String tripId, 
+			@RequestBody TripJoinRequestDto tripJoinRequest) {
+		String loginId = commonUtils.getLoggedInUserLoginId();
+		
+		try {
+			tripService.rejectTripJoinRequest(loginId, tripJoinRequest);
+			logger.info("Request to reject join trip ("+tripId+") for ("+tripJoinRequest.getRequestFrom()+") processed successfully.");
+			
+		} catch (TripManagementException tme) {
+			logger.error(tme);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(CommonUtils.createErrorResponseMessage(tme.getMessage()));
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(CommonUtils.createResponseMessage("Request to reject join trip ("+tripId+") for ("+tripJoinRequest.getRequestFrom()+") processed successfully."));
+	}
+	
+	
 }
