@@ -159,7 +159,7 @@ public class TripController {
 		String loginId = commonUtils.getLoggedInUserLoginId();
 		
 		try {
-			tripService.deleteTrip(loginId, tripId);
+			tripService.leaveTrip(loginId, tripId);
 			logger.info("Leave trip request by ("+loginId+") for trip ("+tripId+") processed successfully.");
 			
 		} catch (TripManagementException tme) {
