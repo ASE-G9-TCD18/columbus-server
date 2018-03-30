@@ -445,7 +445,7 @@ public class TripService {
 		
 		if (!adminLoginId.equals(trip.getAdmin())) {
 			throw new TripRequestedByUnAuthorizedUserException(
-					"You do not have sufficient permissions to " + "reject this request");
+					"You do not have sufficient permissions to reject this request");
 		}
 
 		// update the joinee info about the trip
