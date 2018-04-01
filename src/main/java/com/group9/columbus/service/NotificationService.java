@@ -16,6 +16,12 @@ public class NotificationService {
 	@Autowired
 	ApplicationContext applicationContext;
 
+	/**
+	 * Method that sends a new notification message to the Admin of trip.
+	 * @param fcmToken
+	 * @param requestFrom
+	 * @return
+	 */
 	public boolean sendNewJoinRequestNotification(String fcmToken, String requestFrom) {
 
 		String fcmMessage = null;
@@ -42,6 +48,12 @@ public class NotificationService {
 		return true;
 	}
 
+	/**
+	 * Generic method to send a notification given a message and a deviceid.
+	 * @param fcmToken
+	 * @param message
+	 * @return
+	 */
 	public boolean sendNotification(String fcmToken, String message) {
 
 		String fcmMessage = null;

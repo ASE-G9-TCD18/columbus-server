@@ -1,10 +1,8 @@
 package com.group9.columbus.controller;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.group9.columbus.entity.Criteria;
 import com.group9.columbus.entity.Preference;
 import com.group9.columbus.enums.PreferenceType;
 import org.apache.log4j.Logger;

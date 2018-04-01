@@ -1,7 +1,6 @@
 package com.group9.columbus.controller;
 
 import com.group9.columbus.dto.TripRatingDto;
-import com.group9.columbus.entity.Message;
 import com.group9.columbus.exception.TripManagementException;
 import com.group9.columbus.service.RatingService;
 import com.group9.columbus.utils.CommonUtils;
@@ -9,9 +8,12 @@ import com.group9.columbus.utils.JsonUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Container for trip rating APIs.
+ * @author amit
+ */
 @RestController
 @RequestMapping(value = "/rating")
 public class RateTripController {

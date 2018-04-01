@@ -45,6 +45,10 @@ public class TripsController {
 	}
 	
 
+	/**
+	 * Method that returns all {@link Trip}'s.
+	 * @return
+	 */
 	@RequestMapping(path = "/all", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getSuperAllTrips() {
 		List<Trip> trips = tripService.getAllTrips();

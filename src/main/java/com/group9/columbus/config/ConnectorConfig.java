@@ -9,6 +9,10 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * HTTPS configuration file.
+ * @author amit
+ */
 @Configuration
 public class ConnectorConfig {
 

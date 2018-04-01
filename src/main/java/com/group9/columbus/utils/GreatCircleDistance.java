@@ -2,6 +2,9 @@ package com.group9.columbus.utils;
 
 import com.google.maps.model.LatLng;
 
+/**
+ * GreatCircleDistance computation class.
+ */
 public class GreatCircleDistance {
 
 	double x1;
@@ -19,10 +22,6 @@ public class GreatCircleDistance {
 	public double getDistance() {
 		return computeCosine();
 	}
-
-	/*************************************************************************
-	 * Compute using law of cosines
-	 *************************************************************************/
 
 	private double computeCosine() {
 		// great circle distance in radians

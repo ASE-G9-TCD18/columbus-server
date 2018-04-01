@@ -14,6 +14,10 @@ import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 
+/**
+ * Service class for GPS based operations.
+ * @author amit
+ */
 @Service
 public class GpsService {
 	

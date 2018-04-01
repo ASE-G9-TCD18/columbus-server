@@ -6,6 +6,10 @@ import org.springframework.stereotype.Service;
 import com.group9.columbus.entity.Conversation;
 import com.group9.columbus.repository.ConversationRepository;
 
+/**
+ * Service class for {@link Conversation}'s.
+ * @author amit
+ */
 @Service
 public class ConversationService {
 

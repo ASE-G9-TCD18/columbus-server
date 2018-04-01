@@ -16,6 +16,10 @@ import com.group9.columbus.service.UserManagementService;
 import com.group9.columbus.utils.CommonUtils;
 import com.group9.columbus.utils.JsonUtils;
 
+/**
+ * Container for Signup APIs.
+ * @author amit
+ */
 @RestController
 @RequestMapping(value = "/signup")
 public class SignupController {
@@ -25,6 +29,11 @@ public class SignupController {
 	@Autowired
 	UserManagementService userMgmtSvc;
 
+	/**
+	 * Signup API
+	 * @param ApplicationUser user
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> signUp(@Validated @RequestBody ApplicationUser user) {
 

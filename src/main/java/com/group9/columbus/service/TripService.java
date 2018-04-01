@@ -421,8 +421,6 @@ public class TripService {
 		if (trip == null)
 			throw new TripManagementException("No such trip found with id (" + tripId + ") found!");
 
-		ApplicationUser user = userMgmtService.findUserByUsername(loginId);
-
 		// Remvoe the trip from the user.
 		removeTripFromUser(loginId, trip);
 		

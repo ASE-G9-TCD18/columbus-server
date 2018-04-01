@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.maps.model.DistanceMatrix;
 import com.group9.columbus.dto.TripDto;
 import com.group9.columbus.entity.Trip;
 import com.group9.columbus.service.SearchService;
 import com.group9.columbus.utils.CommonUtils;
 import com.group9.columbus.utils.JsonUtils;
 
+/**
+ * Container for search APIs.
+ * @author amit
+ */
 @RestController
 @RequestMapping(value = "/search")
 public class SearchController {

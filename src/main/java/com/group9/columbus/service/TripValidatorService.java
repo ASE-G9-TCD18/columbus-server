@@ -7,9 +7,18 @@ import com.group9.columbus.entity.Preference;
 import com.group9.columbus.enums.PreferenceType;
 import com.group9.columbus.exception.IncorrectValueFormat;
 
+/**
+ * Trip details validation service.
+ * @author amit
+ */
 @Service
 public class TripValidatorService {
 
+	/**
+	 * Method that validates trip details for creation.
+	 * @param tripDto
+	 * @throws IncorrectValueFormat
+	 */
 	public void validateTripCreationDetails(TripDto tripDto) throws IncorrectValueFormat {
 
 		for (Preference preference : tripDto.getPreferences()) {

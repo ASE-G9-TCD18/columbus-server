@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 
 import com.google.maps.GeoApiContext;
 
+/**
+ * External configuration file that maps to the properties file.
+ * @author amit
+ */
 @Component
 public class ExternalConfig {
 	

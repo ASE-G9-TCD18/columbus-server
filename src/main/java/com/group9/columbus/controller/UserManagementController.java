@@ -25,6 +25,7 @@ public class UserManagementController {
 	UserManagementService userMgmtSvc;
 
 	/**
+	 * API to get the entire user object.
 	 * @param loginId
 	 * @return
 	 */
@@ -36,6 +37,7 @@ public class UserManagementController {
 	}
 
 	/**
+	 * API to edit a user.
 	 * @param loginId
 	 * @param user
 	 * @return

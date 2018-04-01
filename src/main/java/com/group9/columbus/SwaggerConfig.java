@@ -9,6 +9,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 /**
+ * Swagger Configuration.
  * created by yang on 2 Feb 2018
  */
 @Configuration

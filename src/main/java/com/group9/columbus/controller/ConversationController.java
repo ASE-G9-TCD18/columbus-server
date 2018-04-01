@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.group9.columbus.entity.Conversation;
 import com.group9.columbus.entity.Message;
 
+/**
+ * Container class for {@link Conversation} APIs.
+ * @author amit
+ */
 @RestController
 @RequestMapping(value = "/converstation/{conversationId}")
 public class ConversationController {

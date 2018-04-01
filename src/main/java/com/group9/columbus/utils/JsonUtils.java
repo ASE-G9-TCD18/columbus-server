@@ -13,6 +13,11 @@ public class JsonUtils {
 
 	final static Logger logger = Logger.getLogger(JsonUtils.class);
 	
+	/**
+	 * Helper method that encapsulates a {@link Object} in JSON object to return as response.
+	 * @param object
+	 * @return
+	 */
 	public static ResponseEntity<String> getJsonForResponse(Object object) {
 		ObjectMapper om = new ObjectMapper();
 		om.setVisibility(PropertyAccessor.ALL, Visibility.ANY);

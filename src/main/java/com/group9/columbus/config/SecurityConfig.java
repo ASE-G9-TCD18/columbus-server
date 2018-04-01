@@ -23,6 +23,10 @@ import org.springframework.web.filter.CorsFilter;
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * Security Configuration class that maintains authentication entry points and CORS configuration.
+ * @author amit
+ */
 @Configuration
 @EnableSwagger2
 @EnableWebSecurity

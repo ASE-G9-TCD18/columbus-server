@@ -19,6 +19,10 @@ import com.group9.columbus.entity.Trip;
 import com.group9.columbus.entity.TripStop;
 import com.group9.columbus.enums.PreferenceType;
 
+/**
+ * Serivce class for search.
+ * @author amit
+ */
 @Service
 public class SearchService {
 
@@ -101,6 +105,13 @@ public class SearchService {
 		return null;
 	}
 
+	/**
+	 * Helper method that calculates the difference between two {@link Date} objects and returns
+	 * the difference in minutes.
+	 * @param d1
+	 * @param d2
+	 * @return
+	 */
 	private long differenceBtwnTwoDates(String d1, String d2) {
 		SimpleDateFormat dates = new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss");
 
