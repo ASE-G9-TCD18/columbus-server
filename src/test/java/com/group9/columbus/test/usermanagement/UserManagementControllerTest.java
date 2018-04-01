@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.group9.columbus.entity.ApplicationUser;
 import com.group9.columbus.repository.UserRepository;
-import com.group9.columbus.service.UserManagementService;
 import com.group9.columbus.test.TestConfig;
 
 @SpringBootTest(classes = { TestConfig.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -34,9 +33,6 @@ public class UserManagementControllerTest {
 	@Autowired
 	@Qualifier("mvc")
 	private MockMvc mvc;
-
-	@Autowired
-	private UserManagementService userManagementService;
 
 	@MockBean
 	private UserRepository userRepo;

@@ -8,7 +8,6 @@ import com.group9.columbus.exception.TripManagementException;
 import com.group9.columbus.repository.TripRepository;
 import com.group9.columbus.repository.UserRepository;
 import com.group9.columbus.service.TripService;
-import com.group9.columbus.service.UserManagementService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,19 +25,10 @@ import java.util.Arrays;
  * @author yang
  * @date 06/03/2018
  */
-//@SpringBootTest(classes = { TestConfig.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootTest
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 public class JoinTripTest {
-
-//    @Autowired
-//    @Qualifier("mvc")
-//    private MockMvc mvc;
-//
-//    @Autowired
-//    @Qualifier("httpMsgConverter")
-//    private HttpMessageConverter httpMsgConverter;
 
     @MockBean
     private TripRepository tripRepo;
@@ -47,9 +37,6 @@ public class JoinTripTest {
 
     @Autowired
     private TripService tripService;
-
-    @Autowired
-    private UserManagementService userService;
 
     private static final String TRIP_ID = "dummyTp_id";
     private static final String USER_ID_1 = "dummyUsr_1";
